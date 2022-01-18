@@ -5,14 +5,16 @@ from werkzeug.local import LocalProxy
 from flask_pymongo import PyMongo
 from flask.cli import with_appcontext
 
-
 def get_db():
-    db = getattr(g, "_database", None)
+    if 'database' in g:
+        return g.database
+        #db = getattr(g, "_database", None)
 
-    if db is None:
-        db = g._database = PyMongo(current_app).db
-    
-    return db
+    #if db is None:
+    db = g.database = PyMongo(current_app).db
+
+    database = db.smart_oven
+    return database
     
 def close_db(e=None):
     db = g.pop('_database', None)

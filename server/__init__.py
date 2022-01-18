@@ -4,6 +4,8 @@ from flask import Flask
 from .constants import MONGO_URI
 from . import db
 
+from .recipes import bp as recipes_bp
+
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -26,6 +28,8 @@ def create_app(test_config=None):
         pass
 
     db.init_app(app)
+
+    app.register_blueprint(recipes_bp)
 
 
     @app.route('/')
