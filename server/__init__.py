@@ -4,7 +4,7 @@ from flask import Flask
 from .constants import MONGO_URI
 from . import db
 
-from .recipes import bp as recipes_bp
+from . import recipes
 
 
 def create_app(test_config=None):
@@ -29,13 +29,10 @@ def create_app(test_config=None):
 
     db.init_app(app)
 
-    app.register_blueprint(recipes_bp)
-
+    app.register_blueprint(recipes.bp)
 
     @app.route('/')
     def hello_world():
         return "Hello World!"
 
     return app
-    
-
