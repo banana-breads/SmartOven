@@ -36,7 +36,7 @@ def manage_recipes():
         return get_recipes()
 
     if request.method == 'POST':
-        recipe_id = add_recipe(request.json['name'], request.json['time'], request.json['details'], request.json['temperature'])
+        recipe_id = add_recipe(request.json['name'], request.json['prep_time'], request.json['prep_details'], request.json['baking_temperature'])
         return json.loads(json_util.dumps({'message': 'Success', 'id': recipe_id}))
 
 @bp.route('/<recipe_id>', methods=['DELETE'])
@@ -45,3 +45,11 @@ def delete_recipe(recipe_id=None):
     recipes = db.recipes
     recipes.delete_one({'_id': ObjectId(recipe_id)})
     return jsonify({"message": f"Deleted recipe with id {recipe_id}"})
+
+@bp.route('/<recipe_id>', methods=['PUT'])
+def update_recipe(recipe_id=None):
+    db = get_db()
+    recipes = db.recipes
+    updated_recipe = request.json
+    recipes.update_one({'_id': ObjectId(recipe_id)}, {"$set": updated_recipe})
+    return jsonify({"message": f"Updated recipe with id {recipe_id}"})
