@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, jsonify
 from flask import (Blueprint)
 from bson import json_util
 from .db import get_db
@@ -26,8 +26,13 @@ def get_recipe(recipe_name):
     my_recipe = recipes.find_one({'name': recipe_name}, {'_id': 0})
     return my_recipe
 
+def delete_recipes(recipe_name):
+    db = get_db()
+    recipes = db.recipes
+    delete_result = recipes.delete_many({'name': recipe_name})
+    return delete_result.deleted_count
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET', 'POST', 'DELETE'])
 def manage_recipes():
 
     if request.method == "GET":
@@ -38,3 +43,11 @@ def manage_recipes():
     if request.method == 'POST':
         recipe_id = add_recipe(request.json['name'], request.json['time'], request.json['details'], request.json['temperature'])
         return json.loads(json_util.dumps({'message': 'Success', 'id': recipe_id}))
+
+    if request.method == 'DELETE':
+        if request.json and 'name' in request.json:
+            recipe_name = request.json['name']
+            deleted_count = delete_recipes(recipe_name)
+            return jsonify({"message": f"Deleted {deleted_count} {recipe_name} recipes"})
+        else:
+            return jsonify({"message": "Delete request body should contain recipe's name"}), 422
