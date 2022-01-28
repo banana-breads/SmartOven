@@ -7,10 +7,12 @@ import json
 import time
 import os
 
-from server import db
-from server.constants import MONGO_URI
+import recipes
+import db
+from constants import MONGO_URI
 
-# Monkey-patch
+
+# Monkey-patch (required for SocketIO)
 eventlet.monkey_patch()
 
 # Flask, MQTT and SocketIO apps
@@ -41,7 +43,12 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    db.init_app(app)
+    # with app.app_context():
+    #     db.init_db()
+    # db.init_app(app)
+
+    # App blueprints
+    app.register_blueprint(recipes.bp)
 
     # TODO: Delete at the end
     @app.route('/')

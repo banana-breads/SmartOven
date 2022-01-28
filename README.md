@@ -43,7 +43,12 @@ source venv/bin/activate # for Unix
 pip install -r requirements.txt 
 ```
 
+4. Select development mode for server:
+```bash
+export FLASK_ENV=development
+```
+
 4. To run the Flask server, start it with
 ```bash
-flask run
+python app.py
 ```
