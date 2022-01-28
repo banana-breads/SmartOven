@@ -17,3 +17,8 @@ python-engineio==4.3.1
 python-socketio==5.5.1
 six==1.16.0
 Werkzeug==2.0.2
+certifi==2021.10.8
+charset-normalizer==2.0.10
+idna==3.3
+requests==2.27.1
+urllib3==1.26.8

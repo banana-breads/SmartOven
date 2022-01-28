@@ -11,6 +11,7 @@ import time
 import os
 
 import recipes
+import recipe_search_online
 import db
 from constants import MONGO_URI
 from flask_pymongo import PyMongo
@@ -48,6 +49,7 @@ def create_app(test_config=None):
 
     # App blueprints
     app.register_blueprint(recipes.bp)
+    app.register_blueprint(recipe_search_online.bp)
 
     # TODO: Delete at the end
     @app.route('/')
