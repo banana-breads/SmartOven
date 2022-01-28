@@ -1,8 +1,11 @@
+import eventlet
+# Monkey-patch (required for SocketIO)
+eventlet.monkey_patch()
+
 from flask import Flask
 from threading import Thread
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
-import eventlet
 import json
 import time
 import os
@@ -10,10 +13,8 @@ import os
 import recipes
 import db
 from constants import MONGO_URI
+from flask_pymongo import PyMongo
 
-
-# Monkey-patch (required for SocketIO)
-eventlet.monkey_patch()
 
 # Flask, MQTT and SocketIO apps
 app = None
@@ -43,9 +44,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # with app.app_context():
-    #     db.init_db()
-    # db.init_app(app)
+    db.init_app(app)
 
     # App blueprints
     app.register_blueprint(recipes.bp)

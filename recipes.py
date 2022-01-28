@@ -9,7 +9,6 @@ bp = Blueprint('recipes', __name__, url_prefix='/recipe')
 
 
 def add_recipe(recipe_name, time, details, temperature):
-    print("database recipe, ")
     db = get_db()
     recipes = db.recipes
     recipe = {'name': recipe_name, 'prep_time': time, 'prep_details': details, 'baking_temperature': temperature}

@@ -7,14 +7,11 @@ from flask.cli import with_appcontext
 
 def get_db():
     db = getattr(g, "database", None)
-    print("Database: ", db)
     
     if db is None:
-        print(current_app)
-        PyMongo(current_app)
-        # db = g.database = PyMongo(current_app).db
-        
-    database = database.smart_oven
+        db = g.database = PyMongo(current_app).db
+
+    database = db.smart_oven
     return database
 
 
