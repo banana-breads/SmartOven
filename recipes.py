@@ -2,7 +2,7 @@ from flask import request, jsonify
 from flask import (Blueprint)
 from bson import json_util
 from bson.objectid import ObjectId
-from .db import get_db
+from db import get_db
 import json
 
 bp = Blueprint('recipes', __name__, url_prefix='/recipe')
@@ -29,7 +29,6 @@ def get_recipe(recipe_name):
 
 @bp.route('/', methods=['GET', 'POST'])
 def manage_recipes():
-
     if request.method == "GET":
         if request.json and 'name' in request.json:
             return get_recipe(request.json['name'])
