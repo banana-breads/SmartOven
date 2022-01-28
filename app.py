@@ -43,13 +43,9 @@ def create_app(test_config=None):
 
     db.init_app(app)
 
+    # TODO: Delete at the end
     @app.route('/')
     def hello_world():
-        global thread
-        if thread is None:
-            thread = Thread(target=background_thread)
-            thread.daemon = True
-            thread.start()
         return "Hello World!"
 
 
@@ -67,11 +63,18 @@ def setup_mqtt_and_socketio():
     thread = None
     mqtt = Mqtt(app)
     socketio = SocketIO(app, async_mode="eventlet")
+
+
+def start_background_mqtt():
+    global thread
+    if thread is None:
+        thread = Thread(target=background_thread)
+        thread.daemon = True
+        thread.start()
     
 
 # Function that every second publishes a message
 def background_thread():
-    count = 0
     while True:
         time.sleep(1)
         # Using app context is required because the get_status() functions
@@ -85,4 +88,5 @@ def background_thread():
 if __name__ == "__main__":
     create_app()
     setup_mqtt_and_socketio()
+    start_background_mqtt()
     socketio.run(app, host='localhost', port=5000, use_reloader=False, debug=True)
