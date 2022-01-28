@@ -77,7 +77,7 @@ def start_background_mqtt():
         thread = Thread(target=background_thread)
         thread.daemon = True
         thread.start()
-    
+
 
 # Function that every second publishes a message
 def background_thread():

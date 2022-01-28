@@ -10,7 +10,7 @@ topic = "python/mqtt"
 
 client_id = f'python-mqtt-{random.randint(0, 1000)}'
 
-def connect_mqtt():
+def connect_mqtt() -> mqtt_client.Client:
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
@@ -24,7 +24,7 @@ def connect_mqtt():
     return client
 
 
-def publish(client):
+def publish(client: mqtt_client.Client):
     msg_count = 0
     while True:
         time.sleep(1)
@@ -47,3 +47,4 @@ def run():
 
 if __name__ == '__main__':
     run()
+    print("carotf")

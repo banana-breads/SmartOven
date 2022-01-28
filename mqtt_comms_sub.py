@@ -10,7 +10,7 @@ topic = "python/mqtt"
 client_id = f'python-mqtt-{random.randint(0, 100)}'
 
 
-def connect_mqtt() -> mqtt_client:
+def connect_mqtt() -> mqtt_client.Client:
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
@@ -24,7 +24,7 @@ def connect_mqtt() -> mqtt_client:
     return client
 
 
-def subscribe(client: mqtt_client):
+def subscribe(client: mqtt_client.Client):
     def on_message(client, userdata, msg):
         print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
 
