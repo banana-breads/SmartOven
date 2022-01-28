@@ -12,6 +12,8 @@ def get_db():
         db = g.database = PyMongo(current_app).db
 
     database = db.smart_oven
+    recipes = database.recipes
+    recipes.create_index('name', unique = True)
     return database
 
 
