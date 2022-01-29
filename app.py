@@ -1,10 +1,11 @@
-import eventlet
+# import eventlet
 import json
 # Monkey-patch (required for SocketIO)
-eventlet.monkey_patch()
+# eventlet.monkey_patch()
 
 from flask import Flask
-from threading import Thread
+from flasgger import Swagger
+# from threading import Thread
 from flask_mqtt import Mqtt
 from globals import connected_devices, Oven
 import os
@@ -13,13 +14,32 @@ import recipes
 import db
 from constants import MONGO_URI
 
+from spec import SWAGGER_TEMPLATE
+from constants import MONGO_URI, SWAGGER_API_URL, SWAGGER_URL
+from flask_pymongo import PyMongo
+
+
+# Flask, MQTT
+app: Flask
+mqtt: Mqtt
+swagger = None
+# thread = None
+
 
 def create_app(test_config=None):
+    global app, swagger
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
         MONGO_URI=MONGO_URI,
     )
+
+    # Setting up Swagger API
+    app.config['SWAGGER'] = {
+        'uiversion': 3,
+        'openapi': '3.0.2'
+    }
+    swagger = Swagger(app, template=SWAGGER_TEMPLATE)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -38,10 +58,9 @@ def create_app(test_config=None):
     # App blueprints
     app.register_blueprint(recipes.bp)
 
-    return app
 
-
-def mqtt_setup(app):
+def mqtt_setup():
+    global app, mqtt
     # Setup connection to mqtt broker
     app.config['MQTT_BROKER_URL'] = 'localhost'
     # default port for non-tls connection
@@ -56,10 +75,9 @@ def mqtt_setup(app):
     app.config['MQTT_TLS_ENABLED'] = False
 
     mqtt = Mqtt(app)
-    return mqtt
 
 
-def mqtt_listeners_setup(mqtt):
+def mqtt_listeners_setup():
     @mqtt.on_topic('oven/connect')
     def handle_device_connect(client, userdata, msg):
         device_id = msg.payload.decode()
@@ -125,8 +143,8 @@ def mqtt_listeners_setup(mqtt):
 
 
 if __name__ == "__main__":
-    app = create_app()
-    mqtt = mqtt_setup(app)
-    mqtt_listeners_setup(mqtt)
+    create_app()
+    mqtt_setup()
+    mqtt_listeners_setup()
     # start_background_mqtt()
     app.run(debug=False)
