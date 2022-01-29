@@ -5,6 +5,8 @@ from bson.objectid import ObjectId
 from db import get_db
 import json
 
+from globals import connected_devices
+
 bp = Blueprint('recipes', __name__, url_prefix='/recipe')
 
 

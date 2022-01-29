@@ -50,7 +50,7 @@ def publish(client: mqtt_client.Client, oven):
     }
 
     while True:
-        time.sleep(5)
+        time.sleep(1)
         for topic, get_message in topic_actions.items():
             msg = get_message()
             result = client.publish(topic, msg)

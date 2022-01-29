@@ -21,7 +21,7 @@ class Oven():
 
     def get_current_recipe_info(self):
         if self.state is False:
-            return None
+            return json.dumps({})
 
         time_left = self.recipe_end_time - datetime.utcnow()
         minutes = time_left.total_seconds() // 60
