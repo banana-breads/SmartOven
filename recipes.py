@@ -104,7 +104,7 @@ def create_recipe():
                     schema:
                         type: object
                         properties:
-                            message: 
+                            message:
                                 type: string
                                 example: Successfully added the recipe
                             id:
@@ -114,7 +114,7 @@ def create_recipe():
             description: Bad request - Missing required fields for a recipe
             content:
                 application/json:
-                    schema: 
+                    schema:
                         type: object
                         properties:
                             message:
@@ -124,7 +124,7 @@ def create_recipe():
             description: Conflict - Duplicate recipe
             content:
                 application/json:
-                    schema: 
+                    schema:
                         type: object
                         properties:
                             message:
@@ -134,7 +134,7 @@ def create_recipe():
     body = request.json
     if body is None or not validate_recipe_body(body):
         return jsonify({ 'message': 'Missing fields to perform adding of a recipe' }), 400
-    
+
     # Check if exists a recipe with this name
     recipe = get_one_recipe(body['name'])
     print(recipe)
@@ -178,7 +178,7 @@ def get_recipe(recipe_name=None):
             description: Bad request - Missing recipe name
             content:
                 application/json:
-                    schema: 
+                    schema:
                         type: object
                         properties:
                             message:
@@ -188,7 +188,7 @@ def get_recipe(recipe_name=None):
             description: Recipe not found
             content:
                 application/json:
-                    schema: 
+                    schema:
                         type: object
                         properties:
                             message:
@@ -245,7 +245,7 @@ def update_recipe(recipe_id=None):
             description: Recipe not found
             content:
                 application/json:
-                    schema: 
+                    schema:
                         type: object
                         properties:
                             message:
@@ -255,7 +255,7 @@ def update_recipe(recipe_id=None):
             description: Server error during recipe update
             content:
                 application/json:
-                    schema: 
+                    schema:
                         type: object
                         properties:
                             message:
@@ -269,7 +269,7 @@ def update_recipe(recipe_id=None):
     if result.matched_count == 0:
         return jsonify({ "message": "A recipe with the specified id does not exist" }), 404
     if result.modified_count == 0:
-        return jsonfiy({ "message": "An error occured during update of the recipe" }), 500
+        return jsonify({ "message": "An error occured during update of the recipe" }), 500
     return jsonify({"message": f"Updated recipe with id {recipe_id}"})
 
 
@@ -299,7 +299,7 @@ def delete_recipe(recipe_id=None):
             description: Recipe not found
             content:
                 application/json:
-                    schema: 
+                    schema:
                         type: object
                         properties:
                             message:
