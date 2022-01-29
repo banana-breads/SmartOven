@@ -2,7 +2,8 @@ import eventlet
 # Monkey-patch (required for SocketIO)
 eventlet.monkey_patch()
 
-from flask import Flask
+from flask import Flask, jsonify
+from flask_swagger_ui import get_swaggerui_blueprint
 from threading import Thread
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
@@ -12,7 +13,7 @@ import os
 
 import recipes
 import db
-from constants import MONGO_URI
+from constants import MONGO_URI, SWAGGER_API_URL, SWAGGER_URL
 from flask_pymongo import PyMongo
 
 
@@ -52,7 +53,18 @@ def create_app(test_config=None):
     # TODO: Delete at the end
     @app.route('/')
     def hello_world():
-        return "Hello World!"
+        return "Oven. But Smart."
+
+    # Swagger UI
+    swaggerui_blueprint = get_swaggerui_blueprint(
+        SWAGGER_URL,
+        SWAGGER_API_URL,
+        config={
+            'app_name': "SmartOven"
+        },
+    )
+
+    app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 
 def setup_mqtt_and_socketio():
