@@ -3,7 +3,7 @@ import eventlet
 eventlet.monkey_patch()
 
 from flask import Flask, jsonify
-from flask_swagger_ui import get_swaggerui_blueprint
+from flasgger import Swagger
 from threading import Thread
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
@@ -13,24 +13,28 @@ import os
 
 import recipes
 import db
+from spec import SWAGGER_TEMPLATE
 from constants import MONGO_URI, SWAGGER_API_URL, SWAGGER_URL
 from flask_pymongo import PyMongo
 
 
 # Flask, MQTT and SocketIO apps
 app = None
+swagger = None
 mqtt = None
 socketio = None
 thread = None
 
 
 def create_app(test_config=None):
-    global app
+    global app, swagger
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
         MONGO_URI=MONGO_URI,
     )
+
+    swagger = Swagger(app, template=SWAGGER_TEMPLATE)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -52,19 +56,23 @@ def create_app(test_config=None):
 
     # TODO: Delete at the end
     @app.route('/')
-    def hello_world():
+    def smart_oven():
+        """This is the default endpoint with application description
+        ---
+        tags:
+        - users
+        responses:
+            200:
+                description: Application description
+                schema:
+                    id: description
+                    properties:
+                        description:
+                            type: string
+                            description: Description of the application
+                            default: 'Hello World'
+        """
         return "Oven. But Smart."
-
-    # Swagger UI
-    swaggerui_blueprint = get_swaggerui_blueprint(
-        SWAGGER_URL,
-        SWAGGER_API_URL,
-        config={
-            'app_name': "SmartOven"
-        },
-    )
-
-    app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 
 def setup_mqtt_and_socketio():
