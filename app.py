@@ -34,6 +34,11 @@ def create_app(test_config=None):
         MONGO_URI=MONGO_URI,
     )
 
+    # Setting up Swagger API
+    app.config['SWAGGER'] = { 
+        'uiversion': 3,
+        'openapi': '3.0.2'
+    }
     swagger = Swagger(app, template=SWAGGER_TEMPLATE)
 
     if test_config is None:
@@ -57,21 +62,6 @@ def create_app(test_config=None):
     # TODO: Delete at the end
     @app.route('/')
     def smart_oven():
-        """This is the default endpoint with application description
-        ---
-        tags:
-        - users
-        responses:
-            200:
-                description: Application description
-                schema:
-                    id: description
-                    properties:
-                        description:
-                            type: string
-                            description: Description of the application
-                            default: 'Hello World'
-        """
         return "Oven. But Smart."
 
 
@@ -88,7 +78,7 @@ def setup_mqtt_and_socketio():
 
     thread = None
     mqtt = Mqtt(app)
-    socketio = SocketIO(app, async_mode="eventlet")
+    socketio = SocketIO(app, async_mode="eventlet", logger=True, engineio_logger=True)
 
 
 def start_background_mqtt():

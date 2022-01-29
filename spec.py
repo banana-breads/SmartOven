@@ -1,9 +1,9 @@
 SWAGGER_TEMPLATE = {
-    "swagger": "2.0",
+    # "swagger": "3.0",
     "info": {
-        "description": "SmartOven",
+        "title": "SmartOven",
+        "description": "Oven. But smart.",
         "version": "1.0.0",
-        "title": "Oven. But smart.",
         "license": {
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"

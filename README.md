@@ -52,3 +52,6 @@ export FLASK_ENV=development
 ```bash
 python app.py
 ```
+
+# Swagger API
+To access the Swagger API, access [http://localhost:5000/apidocs/]() and enjoy all of your oven's features.
