@@ -2,7 +2,8 @@ import eventlet
 # Monkey-patch (required for SocketIO)
 eventlet.monkey_patch()
 
-from flask import Flask
+from flask import Flask, jsonify
+from flasgger import Swagger
 from threading import Thread
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
@@ -12,24 +13,33 @@ import os
 
 import recipes
 import db
-from constants import MONGO_URI
+from spec import SWAGGER_TEMPLATE
+from constants import MONGO_URI, SWAGGER_API_URL, SWAGGER_URL
 from flask_pymongo import PyMongo
 
 
 # Flask, MQTT and SocketIO apps
 app = None
+swagger = None
 mqtt = None
 socketio = None
 thread = None
 
 
 def create_app(test_config=None):
-    global app
+    global app, swagger
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
         MONGO_URI=MONGO_URI,
     )
+
+    # Setting up Swagger API
+    app.config['SWAGGER'] = { 
+        'uiversion': 3,
+        'openapi': '3.0.2'
+    }
+    swagger = Swagger(app, template=SWAGGER_TEMPLATE)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -51,8 +61,8 @@ def create_app(test_config=None):
 
     # TODO: Delete at the end
     @app.route('/')
-    def hello_world():
-        return "Hello World!"
+    def smart_oven():
+        return "Oven. But Smart."
 
 
 def setup_mqtt_and_socketio():
@@ -68,7 +78,7 @@ def setup_mqtt_and_socketio():
 
     thread = None
     mqtt = Mqtt(app)
-    socketio = SocketIO(app, async_mode="eventlet")
+    socketio = SocketIO(app, async_mode="eventlet", logger=True, engineio_logger=True)
 
 
 def start_background_mqtt():
