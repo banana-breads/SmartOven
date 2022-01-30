@@ -7,6 +7,8 @@ load_dotenv(find_dotenv())
 MONGODB_PASSWORD = "ingineriesoftware" if os.getenv('MONGODB_PASSWORD') is None else os.getenv('MONGODB_PASSWORD')
 MONGO_URI = f"mongodb+srv://smartover-iot:{MONGODB_PASSWORD}@smartover-iot.ccvsc.mongodb.net/SMART_OVEN_DB?retryWrites=true&w=majority"
 
+MONGO_URI_TEST = f"mongodb+srv://smartover-iot:{MONGODB_PASSWORD}@smartover-iot.ccvsc.mongodb.net/SMART_OVEN_DB_TEST?retryWrites=true&w=majority"
+
 # Swagger UI
 SWAGGER_URL = "/docs"
 SWAGGER_API_URL = "/static/swagger.json"
