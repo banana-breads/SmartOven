@@ -89,6 +89,15 @@ def mqtt_register_callback(sub_topic_filter, callback):
         print("Client is not initialized. Cannot register callback")
 
 
+def mqtt_unsubscribe(topic):
+    global _client
+
+    if _client is not None:
+        _client.unsubscribe(topic)
+    else:
+        print("Client is not initialized. Cannot unsubscribe")
+
+
 def mqtt_publish_message(topic, message):
     global _client
 
