@@ -19,26 +19,25 @@ def _on_connect(client, userdata, flags, rc):
         print("Failed to connect, return code %d\n", rc)
 
 
-# def _on_disconnect(client):
-#     """
-#         On forced disconnect, notify
-#     """
-#     def handler(signal, frame):
-#         print(f'Received signal {signal}. Terminating...')
-#         client_id = str(client._client_id.decode())
-#         client.publish('oven/disconnect', client_id)
-#         time.sleep(3)
-#         exit(0)
-#
-#     return handler
+def _disconnect_handler():
+    """
+        On forced disconnect, notify
+    """
+    def handler(signal, frame):
+        print(f'Received signal {signal}. Terminating...')
+        client_id = _client._client_id.decode()
+        _client.publish('device/disconnect', client_id)
+        _client.disconnect()
+        time.sleep(2)
+        exit(0)
+
+    return handler
 
 
 def _on_disconnect(client, userdata, rc):
     """
         On disconnect, notify
     """
-    client_id = str(client._client_id.decode())
-    client.publish('device/disconnect', client_id)
     if rc == 0:
         print("Disconnect successful")
     else:
@@ -78,6 +77,7 @@ def _client_connect(device_name, device_serial):
     _client.on_connect = _on_connect
     _client.on_message = _on_connect
     _client.on_disconnect = _on_disconnect
+    signal.signal(signal.SIGINT, _disconnect_handler())
 
     _client.connect(_BROKER, _PORT)
 
@@ -114,7 +114,7 @@ def publish_message(topic, message):
         print("Client is not initialized. Cannot publish message")
 
 
-def start(device_name, device_serial, callbacks):
+def start(device_name, device_serial, callbacks=[]):
     _client_connect(device_name, device_serial)
     for topic, fun in callbacks:
         register_callback(topic, fun)

@@ -78,7 +78,7 @@ def mqtt_setup():
 
 
 def mqtt_listeners_setup():
-    @mqtt.on_topic('oven/connect')
+    @mqtt.on_topic('device/connect')
     def handle_device_connect(client, userdata, msg):
         device_id = msg.payload.decode()
 
@@ -112,15 +112,15 @@ def mqtt_listeners_setup():
             mqtt.subscribe(f'{device_id}/#')
 
 
-    @mqtt.on_topic('oven/disconnect')
+    @mqtt.on_topic('device/disconnect')
     def handle_device_disconnect(client, userdata, msg):
         device_id = msg.payload.decode()
         connected_devices.pop(device_id, None)
         print(f'Device disconnected {device_id}')
         mqtt.unsubscribe(f'{device_id}/#')
 
-    mqtt.subscribe('oven/connect')
-    mqtt.subscribe('oven/disconnect')
+    mqtt.subscribe('device/connect')
+    mqtt.subscribe('device/disconnect')
 
 
 # Function that every second publishes a message
