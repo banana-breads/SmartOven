@@ -67,7 +67,7 @@ def _on_publish(client, userdata, msg):
     print(f"Successfully published {data} on topic {topic}")
 
 
-def mqtt_client_connect(device_name, device_serial):
+def client_connect(device_name, device_serial):
     global _client
 
     client_id = f'{device_name}-{device_serial}'
@@ -80,7 +80,7 @@ def mqtt_client_connect(device_name, device_serial):
     client.connect(_BROKER)
 
 
-def mqtt_register_callback(sub_topic_filter, callback):
+def register_callback(sub_topic_filter, callback):
     global _client
 
     if _client is not None:
@@ -89,7 +89,7 @@ def mqtt_register_callback(sub_topic_filter, callback):
         print("Client is not initialized. Cannot register callback")
 
 
-def mqtt_unsubscribe(topic):
+def unsubscribe(topic):
     global _client
 
     if _client is not None:
@@ -98,7 +98,7 @@ def mqtt_unsubscribe(topic):
         print("Client is not initialized. Cannot unsubscribe")
 
 
-def mqtt_publish_message(topic, message):
+def publish_message(topic, message):
     global _client
 
     if _client is not None:
@@ -107,6 +107,6 @@ def mqtt_publish_message(topic, message):
         print("Client is not initialized. Cannot publish message")
 
 
-def mqtt_start_non_blocking():
+def start_non_blocking():
     global _client
     _client.loop_start()
