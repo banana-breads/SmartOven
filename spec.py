@@ -1,5 +1,6 @@
+import json
+
 SWAGGER_TEMPLATE = {
-    # "swagger": "3.0",
     "info": {
         "title": "SmartOven",
         "description": "Oven. But smart.",
@@ -10,3 +11,8 @@ SWAGGER_TEMPLATE = {
         }
     }
 }
+
+
+def dump_apispecs_to_json(swagger, path="./static/swagger.json"):
+    with open(path, 'w') as f:
+        json.dump(swagger.get_apispecs(), f, indent=2)

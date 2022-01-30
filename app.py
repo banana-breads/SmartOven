@@ -14,7 +14,7 @@ import recipes
 import db
 from constants import MONGO_URI
 
-from spec import SWAGGER_TEMPLATE
+from spec import SWAGGER_TEMPLATE, dump_apispecs_to_json
 from constants import MONGO_URI, SWAGGER_API_URL, SWAGGER_URL
 from flask_pymongo import PyMongo
 
@@ -55,8 +55,13 @@ def create_app(test_config=None):
         pass
 
     db.init_app(app)
+    
     # App blueprints
     app.register_blueprint(recipes.bp)
+
+    # Dump Swagger specs to json
+    with app.app_context():
+        dump_apispecs_to_json(swagger)
 
 
 def mqtt_setup():
