@@ -42,7 +42,7 @@
 SmartOven is an IoT project which aims to make baking a simpler and more enjoyable experience. 
 
 SmartOven's developers are 
-<a href="https://github.com/mehanix">Nicoleta Ciașu</a>,
+<a href="https://github.com/mehanix">Nicoleta Ciaușu</a>,
 <a href="https://github.com/Nicu-Ducal">Nicolae Ducal</a>,
 <a href="https://github.com/Stefan-Radu">Ștefan Radu</a> and
 <a href="https://github.com/lauratender">Laura Tender</a>.
