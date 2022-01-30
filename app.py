@@ -12,7 +12,7 @@ import os
 
 import recipes
 import db
-from constants import MONGO_URI
+from constants import MONGO_URI, MONGO_URI_TEST
 
 from spec import SWAGGER_TEMPLATE
 from constants import MONGO_URI, SWAGGER_API_URL, SWAGGER_URL
@@ -26,13 +26,20 @@ swagger = None
 # thread = None
 
 
-def create_app(test_config=None):
+def create_app(test_config=None, testing=None):
     global app, swagger
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        MONGO_URI=MONGO_URI,
-    )
+    if not testing:
+        app.config.from_mapping(
+            SECRET_KEY='dev',
+            MONGO_URI=MONGO_URI,
+        )
+    else:
+        app.config.from_mapping(
+            SECRET_KEY='test',
+            MONGO_URI=MONGO_URI_TEST,
+        )
+
 
     # Setting up Swagger API
     app.config['SWAGGER'] = {
@@ -57,6 +64,7 @@ def create_app(test_config=None):
     db.init_app(app)
     # App blueprints
     app.register_blueprint(recipes.bp)
+    return app
 
 
 def mqtt_setup():
