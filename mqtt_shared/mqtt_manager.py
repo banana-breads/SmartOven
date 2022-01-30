@@ -3,6 +3,7 @@ import time
 import signal
 
 from paho.mqtt import client as mqtt_client
+from mqtt_topics import CONNECT, DISCONNECT
 
 _client: mqtt_client.Client
 _BROKER = "broker.emqx.io"
@@ -18,7 +19,7 @@ def get_client_id():
 def _on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected to MQTT Broker!")
-        client.publish('device/connect', get_client_id())
+        client.publish(CONNECT, get_client_id())
     else:
         print("Failed to connect, return code %d\n", rc)
 
@@ -29,7 +30,7 @@ def _disconnect_handler():
     """
     def handler(signal, frame):
         print(f'Received signal {signal}. Terminating...')
-        _client.publish('device/disconnect', get_client_id())
+        _client.publish(DISCONNECT, get_client_id())
         _client.disconnect()
         time.sleep(2)
         exit(0)

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
 from db import get_db
-from shared import mqtt_manager
+from mqtt_shared import mqtt_manager
 from recipes import get_one_recipe
 
 bp = Blueprint('ovens', __name__, url_prefix='/oven')
@@ -12,7 +12,7 @@ Oven will start preparing food according to its given settings.
 """
 @bp.route("/oven/<oven_id>/state", methods=['POST'])
 def set_oven_state(oven_id=None, new_state=False):
-
+    print(oven_id, new_state)
     body = request.json
     if body is None or not body.get('state'):
         return jsonify({ 'message': f'Missing state parameter. No action taken on oven {oven_id}.' }), 400

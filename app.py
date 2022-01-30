@@ -12,7 +12,7 @@ import os
 import recipes
 import ovens
 import db
-from shared import mqtt_manager
+from mqtt_shared import mqtt_manager
 from constants import MONGO_URI
 
 from spec import SWAGGER_TEMPLATE

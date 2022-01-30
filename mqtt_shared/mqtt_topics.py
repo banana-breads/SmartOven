@@ -1,6 +1,9 @@
-PREFIX = 'BananaBreadSmartOven/device/{device_id}'
+CONNECT = 'BananaBreadSmartOven/connect'
+DISCONNECT = 'BananaBreadSmartOven/disconnect'
 
 ################
+
+PREFIX = 'BananaBreadSmartOven/{device_id}'
 
 INFO_PREFIX = f'{PREFIX}/info'
 
