@@ -12,7 +12,7 @@ import os
 import recipes
 import ovens
 import db
-from mqtt_shared import mqtt_manager
+from mqtt_shared import mqtt_manager, mqtt_topics
 from constants import MONGO_URI
 
 from spec import SWAGGER_TEMPLATE
@@ -86,14 +86,14 @@ def _handle_device_connect(client, userdata, msg):
             elif info_type == 'recipe_details':
                 device.recipe_details = data
 
-        mqtt_manager.register_callback(f'{device_id}/#',_handle_device_info)
+        mqtt_manager.register_callback(INFO_PREFIX.format(device_id=device_id) + "/#",_handle_device_info)
 
 
 def _handle_device_disconnect(client, userdata, msg):
     device_id = msg.payload.decode()
     connected_devices.pop(device_id, None)
     print(f'Device disconnected {device_id}')
-    mqtt.unsubscribe(f'{device_id}/#')
+    mqtt.unsubscribe(INFO_PREFIX.format(device_id=device_id) + "/#")
 
 
 # Function that every second publishes a message
@@ -117,6 +117,6 @@ def _handle_device_disconnect(client, userdata, msg):
 
 if __name__ == "__main__":
     create_app()
-    mqtt_manager.start("server", 1,[("oven/connect", _handle_device_connect), ("oven/disconnect", _handle_device_disconnect)])
+    mqtt_manager.start("server", 1,[(mqtt_topics.CONNECT, _handle_device_connect), (mqtt_topics.DISCONNECT, _handle_device_disconnect)])
     # start_background_mqtt()
     app.run(debug=False)
