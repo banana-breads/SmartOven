@@ -118,13 +118,13 @@ def get_recipe(recipe_name=None):
                                 type: string
                                 example: Recipe not found
     """
-    # if recipe_name is None:
-    #     return jsonify({ "message": "Invalid request" }), 400
+    if recipe_name is None:
+        return jsonify({ "message": "Invalid request" }), 400
 
-    # my_recipe = get_one_recipe(recipe_name)
-    # if my_recipe is None:
-    #     return jsonify({"message": f"No {recipe_name} recipe"}), 404
-    # return my_recipe, 200
+    my_recipe = get_one_recipe(recipe_name)
+    if my_recipe is None:
+        return jsonify({"message": f"No {recipe_name} recipe"}), 404
+    return my_recipe, 200
     return {"message": "Success"}, 200
 
 
