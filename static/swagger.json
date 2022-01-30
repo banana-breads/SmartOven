@@ -9,7 +9,7 @@
     }
   },
   "paths": {
-    "/recipe/": {
+    "/recipe": {
       "get": {
         "summary": "Get all recipes that are saved in the oven's database",
         "responses": {
@@ -61,21 +61,23 @@
                 ],
                 "properties": {
                   "name": {
-                    "type": "string",
-                    "example": "Test recipe"
+                    "type": "string"
                   },
                   "prep_time": {
-                    "type": "integer",
-                    "example": 10
+                    "type": "integer"
                   },
                   "prep_details": {
-                    "type": "string",
-                    "example": "Test recipe details"
+                    "type": "string"
                   },
                   "baking_temperature": {
-                    "type": "integer",
-                    "example": 20
+                    "type": "integer"
                   }
+                },
+                "example": {
+                  "name": "test recipe",
+                  "prep_time": 10,
+                  "prep_details": "Test recipe details",
+                  "baking_temperature": 20
                 }
               }
             }
@@ -207,7 +209,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "test-recipe"
             }
           }
         ]

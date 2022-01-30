@@ -38,7 +38,7 @@ def get_one_recipe(name):
     return recipe
 
 
-@bp.route('/', methods=['GET'])
+@bp.route('', methods=['GET'])
 def get_all_recipes():
     """
     Get all recipes that are saved in the oven's database
@@ -67,7 +67,68 @@ def get_all_recipes():
     return jsonify(get_recipes())
 
 
-@bp.route('/', methods=['POST'])
+@bp.route('/<recipe_name>', methods=['GET'])
+def get_recipe(recipe_name=None):
+    """
+    Get recipe with the specified name from oven's database
+    ---
+    parameters:
+        - name: recipe_name
+          in: path
+          required: true
+          schema:
+              type: string
+              example: test-recipe
+    responses:
+        200:
+            description: Successfully returned the specified recipe
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required:
+                            - name
+                        properties:
+                            name:
+                                type: string
+                            prep_time:
+                                type: integer
+                            prep_details:
+                                type: string
+                            baking_temperature:
+                                type: integer
+        400:
+            description: Bad request - Missing recipe name
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+                                example: Invalid request
+        404:
+            description: Recipe not found
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+                                example: Recipe not found
+    """
+    # if recipe_name is None:
+    #     return jsonify({ "message": "Invalid request" }), 400
+
+    # my_recipe = get_one_recipe(recipe_name)
+    # if my_recipe is None:
+    #     return jsonify({"message": f"No {recipe_name} recipe"}), 404
+    # return my_recipe, 200
+    return {"message": "Success"}, 200
+
+
+@bp.route('', methods=['POST'])
 def create_recipe():
     """
     Add a new recipe in the oven's database
@@ -86,16 +147,17 @@ def create_recipe():
                     properties:
                         name:
                             type: string
-                            example: Test recipe
                         prep_time:
                             type: integer
-                            example: 10
                         prep_details:
                             type: string
-                            example: Test recipe details
                         baking_temperature:
                             type: integer
-                            example: 20
+                    example:
+                        name: test recipe
+                        prep_time: 10
+                        prep_details: Test recipe details
+                        baking_temperature: 20
     responses:
         200:
             description: Successfully added a new recipe
@@ -137,71 +199,11 @@ def create_recipe():
 
     # Check if exists a recipe with this name
     recipe = get_one_recipe(body['name'])
-    print(recipe)
     if recipe is not None:
         return jsonify({ 'message': 'A recipe with the same name already exists' }), 409
 
     new_recipe_id = add_recipe(body['name'], body['prep_time'], body['prep_details'], body['baking_temperature'])
     return jsonify({'message': 'Successfully added the recipe', 'id': str(new_recipe_id)})
-
-
-@bp.route('/<recipe_name>', methods=['GET'])
-def get_recipe(recipe_name=None):
-    """
-    Get recipe with the specified name from oven's database
-    ---
-    parameters:
-        - name: recipe_name
-          in: path
-          required: true
-          schema:
-              type: string
-    responses:
-        200:
-            description: Successfully returned the specified recipe
-            content:
-                application/json:
-                    schema:
-                        type: object
-                        required:
-                            - name
-                        properties:
-                            name:
-                                type: string
-                            prep_time:
-                                type: integer
-                            prep_details:
-                                type: string
-                            baking_temperature:
-                                type: integer
-        400:
-            description: Bad request - Missing recipe name
-            content:
-                application/json:
-                    schema:
-                        type: object
-                        properties:
-                            message:
-                                type: string
-                                example: Invalid request
-        404:
-            description: Recipe not found
-            content:
-                application/json:
-                    schema:
-                        type: object
-                        properties:
-                            message:
-                                type: string
-                                example: Recipe not found
-    """
-    if recipe_name is None:
-        return jsonify({ "message": "Invalid request" }), 400
-
-    my_recipe = get_one_recipe(recipe_name)
-    if my_recipe is None:
-        return jsonify({"message": f"No {recipe_name} recipe"}), 404
-    return my_recipe, 200
 
 
 @bp.route('/<recipe_id>', methods=['PUT'])

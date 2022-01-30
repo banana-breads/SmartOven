@@ -1,4 +1,5 @@
 import json
+import yaml
 
 SWAGGER_TEMPLATE = {
     "info": {
@@ -13,6 +14,13 @@ SWAGGER_TEMPLATE = {
 }
 
 
-def dump_apispecs_to_json(swagger, path="./static/swagger.json"):
-    with open(path, 'w') as f:
+def dump_apispecs_to_json(swagger, path="./static/swagger"):
+    with open(f"{path}.json", 'w') as f:
         json.dump(swagger.get_apispecs(), f, indent=2)
+    with open(f"{path}.yml", 'w') as f:
+        with open(f"{path}.json") as jf:
+            data = json.load(jf)
+            if data.get("definitions") == {}:
+                data.pop("definitions")
+            yaml.dump(data, f)
+    
