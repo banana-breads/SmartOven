@@ -18,6 +18,8 @@ from spec import SWAGGER_TEMPLATE
 from constants import MONGO_URI, SWAGGER_API_URL, SWAGGER_URL
 from flask_pymongo import PyMongo
 
+import mqtt_shared.mqtt_topics as topics
+
 
 # Flask, MQTT
 app: Flask
@@ -62,7 +64,7 @@ def create_app(test_config=None):
 def mqtt_setup():
     global app, mqtt
     # Setup connection to mqtt broker
-    app.config['MQTT_BROKER_URL'] = 'localhost'
+    app.config['MQTT_BROKER_URL'] = 'broker.emqx.io'
     # default port for non-tls connection
     app.config['MQTT_BROKER_PORT'] = 1883
     # set the username here if you need authentication for the broker
@@ -91,25 +93,28 @@ def mqtt_listeners_setup():
             subscribe and handle messages sent
             to it's corresponding topic
             '''
-            @mqtt.on_topic(f'{device_id}/#')
+            topic = f'{topics.INFO_PREFIX.format(device_id=device_id)}/#'
+
+            @mqtt.on_topic(topic)
             def handle_device_info(client, userdata, msg):
                 topic = msg.topic
                 payload = msg.payload.decode()
                 data = json.loads(payload)
-                info_type = topic.split('/')[1]
+                info_type = topic.split('/')[-1]
 
                 if device_id not in connected_devices:
                     # TODO logging
                     print(f'Device {device_id} not connected')
                     return
 
+                from pprint import pprint; pprint(data)
                 device = connected_devices[device_id]
                 if info_type == 'temperature':
                     device.temperature = data
                 elif info_type == 'recipe_details':
                     device.recipe_details = data
 
-            mqtt.subscribe(f'{device_id}/#')
+            mqtt.subscribe(topic)
 
 
     @mqtt.on_topic('device/disconnect')
