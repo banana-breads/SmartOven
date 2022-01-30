@@ -3,7 +3,7 @@ import time
 import signal
 
 from paho.mqtt import client as mqtt_client
-from mqtt_topics import CONNECT, DISCONNECT
+from mqtt_shared.mqtt_topics import CONNECT, DISCONNECT
 
 _client: mqtt_client.Client
 _BROKER = "broker.emqx.io"
