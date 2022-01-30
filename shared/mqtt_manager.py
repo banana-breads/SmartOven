@@ -5,14 +5,16 @@ import signal
 from paho.mqtt import client as mqtt_client
 
 _client: mqtt_client.Client
-_BROKER = "broker.emqx.io"
+# _BROKER = "broker.emqx.io"
+_BROKER = 'localhost'
+_PORT = 1883
 
 
 def _on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected to MQTT Broker!")
         client_id = str(client._client_id.decode())
-        client.publish('oven/connect', client_id)
+        client.publish('device/connect', client_id)
     else:
         print("Failed to connect, return code %d\n", rc)
 
@@ -36,7 +38,7 @@ def _on_disconnect(client, userdata, rc):
         On disconnect, notify
     """
     client_id = str(client._client_id.decode())
-    client.publish('oven/disconnect', client_id)
+    client.publish('device/disconnect', client_id)
     if rc == 0:
         print("Disconnect successful")
     else:
@@ -67,17 +69,22 @@ def _on_publish(client, userdata, msg):
     print(f"Successfully published {data} on topic {topic}")
 
 
-def client_connect(device_name, device_serial):
+def _client_connect(device_name, device_serial):
     global _client
 
     client_id = f'{device_name}-{device_serial}'
-    client = mqtt_client.Client(client_id)
+    _client = mqtt_client.Client(client_id)
 
-    client.on_connect = _on_connect
-    client.on_message = _on_connect
-    client.on_disconnect = _on_disconnect
+    _client.on_connect = _on_connect
+    _client.on_message = _on_connect
+    _client.on_disconnect = _on_disconnect
 
-    client.connect(_BROKER)
+    _client.connect(_BROKER, _PORT)
+
+
+def _start_non_blocking():
+    global _client
+    _client.loop_start()
 
 
 def register_callback(sub_topic_filter, callback):
@@ -107,6 +114,8 @@ def publish_message(topic, message):
         print("Client is not initialized. Cannot publish message")
 
 
-def start_non_blocking():
-    global _client
-    _client.loop_start()
+def start(device_name, device_serial, callbacks):
+    _client_connect(device_name, device_serial)
+    for topic, fun in callbacks:
+        register_callback(topic, fun)
+    _start_non_blocking()
