@@ -72,12 +72,5 @@ def run():
     oven = Oven()
     publish(client, oven)
 
-# def subscribe(client: mqtt_client.Client):
-#     def on_message(client, userdata, msg):
-#         print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
-#
-#     client.subscribe(topic)
-#     client.on_message = on_message
-
 if __name__ == '__main__':
     run()

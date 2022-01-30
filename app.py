@@ -6,22 +6,19 @@ import json
 from flask import Flask
 from flasgger import Swagger
 # from threading import Thread
-from flask_mqtt import Mqtt
 from globals import connected_devices, Oven
 import os
 
 import recipes
+import ovens
 import db
+from shared import mqtt_manager
 from constants import MONGO_URI
 
 from spec import SWAGGER_TEMPLATE
 from constants import MONGO_URI, SWAGGER_API_URL, SWAGGER_URL
 from flask_pymongo import PyMongo
 
-
-# Flask, MQTT
-app: Flask
-mqtt: Mqtt
 swagger = None
 # thread = None
 
@@ -57,70 +54,46 @@ def create_app(test_config=None):
     db.init_app(app)
     # App blueprints
     app.register_blueprint(recipes.bp)
+    app.register_blueprint(ovens.bp)
 
 
-def mqtt_setup():
-    global app, mqtt
-    # Setup connection to mqtt broker
-    app.config['MQTT_BROKER_URL'] = 'localhost'
-    # default port for non-tls connection
-    app.config['MQTT_BROKER_PORT'] = 1883
-    # set the username here if you need authentication for the broker
-    app.config['MQTT_USERNAME'] = ''
-    # set the password here if the broker demands authentication
-    app.config['MQTT_PASSWORD'] = ''
-    # set the time interval for sending a ping to the broker to 5 seconds
-    app.config['MQTT_KEEPALIVE'] = 5
-    # set TLS to disabled for testing purposes
-    app.config['MQTT_TLS_ENABLED'] = False
+def _handle_device_connect(client, userdata, msg):
+    device_id = msg.payload.decode()
 
-    mqtt = Mqtt(app)
+    if device_id not in connected_devices:
+        connected_devices[device_id] = Oven(device_id)
+        print(f'Device connected {device_id}')
 
+        '''
+        new device connected
+        subscribe and handle messages sent
+        to it's corresponding topic
+        '''
+        def _handle_device_info(client, userdata, msg):
+            topic = msg.topic
+            payload = msg.payload.decode()
+            data = json.loads(payload)
+            info_type = topic.split('/')[1]
 
-def mqtt_listeners_setup():
-    @mqtt.on_topic('oven/connect')
-    def handle_device_connect(client, userdata, msg):
-        device_id = msg.payload.decode()
+            if device_id not in connected_devices:
+                # TODO logging
+                print(f'Device {device_id} not connected')
+                return
 
-        if device_id not in connected_devices:
-            connected_devices[device_id] = Oven(device_id)
-            print(f'Device connected {device_id}')
+            device = connected_devices[device_id]
+            if info_type == 'temperature':
+                device.temperature = data
+            elif info_type == 'recipe_details':
+                device.recipe_details = data
 
-            '''
-            new device connected
-            subscribe and handle messages sent
-            to it's corresponding topic
-            '''
-            @mqtt.on_topic(f'{device_id}/#')
-            def handle_device_info(client, userdata, msg):
-                topic = msg.topic
-                payload = msg.payload.decode()
-                data = json.loads(payload)
-                info_type = topic.split('/')[1]
-
-                if device_id not in connected_devices:
-                    # TODO logging
-                    print(f'Device {device_id} not connected')
-                    return
-
-                device = connected_devices[device_id]
-                if info_type == 'temperature':
-                    device.temperature = data
-                elif info_type == 'recipe_details':
-                    device.recipe_details = data
-
-            mqtt.subscribe(f'{device_id}/#')
+        mqtt_manager.register_callback(f'{device_id}/#',_handle_device_info)
 
 
-    @mqtt.on_topic('oven/disconnect')
-    def handle_device_disconnect(client, userdata, msg):
-        device_id = msg.payload.decode()
-        connected_devices.pop(device_id, None)
-        print(f'Device disconnected {device_id}')
-        mqtt.unsubscribe(f'{device_id}/#')
-
-    mqtt.subscribe('oven/connect')
-    mqtt.subscribe('oven/disconnect')
+def _handle_device_disconnect(client, userdata, msg):
+    device_id = msg.payload.decode()
+    connected_devices.pop(device_id, None)
+    print(f'Device disconnected {device_id}')
+    mqtt.unsubscribe(f'{device_id}/#')
 
 
 # Function that every second publishes a message
@@ -144,7 +117,6 @@ def mqtt_listeners_setup():
 
 if __name__ == "__main__":
     create_app()
-    mqtt_setup()
-    mqtt_listeners_setup()
+    mqtt_manager.start("server", 1,[("oven/connect", _handle_device_connect), ("oven/disconnect", _handle_device_disconnect)])
     # start_background_mqtt()
     app.run(debug=False)
