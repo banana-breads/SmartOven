@@ -4,7 +4,7 @@ import uuid
 import mqtt_shared.mqtt_manager as mqtt
 import mqtt_shared.mqtt_topics as mqtt_topics
 
-from oven.oven import Oven
+from oven.oven import get_oven
 
 _PUBLISH_RATE = 3 # pause between publishes
 
@@ -14,7 +14,8 @@ def run():
 
     mqtt.start(client_name, client_serial)
 
-    oven = Oven()
+    oven = get_oven()
+    oven.set_listeners()
     while True:
         oven.publish_sensor_data()
         time.sleep(_PUBLISH_RATE)

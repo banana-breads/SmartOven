@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, request, jsonify
 from mqtt_shared import mqtt_manager, mqtt_topics
 from recipes import get_one_recipe
@@ -5,10 +7,7 @@ from globals import connected_devices
 
 
 def _check_if_oven_exists(oven_id):
-    device_ids = [x.id for x in connected_devices]
-    if oven_id not in device_ids:
-        return False
-    return True
+    return oven_id in connected_devices
 
 
 bp = Blueprint('ovens', __name__, url_prefix='/oven')
@@ -17,9 +16,10 @@ bp = Blueprint('ovens', __name__, url_prefix='/oven')
 Manage oven state (True if oven is on, False otherwise)
 Oven will start preparing food according to its given settings.
 """
-@bp.route("/oven/<oven_id>/state", methods=['POST'])
+@bp.route("/<oven_id>/state", methods=['POST'])
 def set_oven_state(oven_id=None):
     body = request.json
+    print(body)
     if body is None or not body.get('state'):
         return jsonify({ 'message': f'Missing state parameter.' \
                         f'No action taken on oven {oven_id}.' }), 400
@@ -38,7 +38,7 @@ def set_oven_state(oven_id=None):
         return jsonify({"message": f"Bad value. Cannot change state."}), 404
 
     topic = mqtt_topics.SET_STATE.format(device_id=oven_id)
-    mqtt_manager.publish_message(topic, jsonify.dumps({"state": new_state}))
+    mqtt_manager.publish_message(topic, json.dumps({"state": new_state}))
 
     return jsonify({"message": result}), 200
 
@@ -46,7 +46,7 @@ def set_oven_state(oven_id=None):
 Sets the oven to the cooking parameters specified in the recipe
 (cooking temperature, cooking time).
 """
-@bp.route("/oven/<oven_id>/setRecipe/<recipe_name>", methods=['POST'])
+@bp.route("/<oven_id>/setRecipe/<recipe_name>", methods=['POST'])
 def set_oven_recipe(oven_id=None, recipe_name=None):
     if not _check_if_oven_exists(oven_id):
         return jsonify({"message": f"Oven with id {oven_id} does not exist." \
@@ -59,14 +59,14 @@ def set_oven_recipe(oven_id=None, recipe_name=None):
                         " Cannot set recipe."}), 404
 
     topic = mqtt_topics.SET_RECIPE.format(device_id=oven_id)
-    mqtt_manager.publish_message(topic, jsonify.dumps({"recipe": recipe}))
+    mqtt_manager.publish_message(topic, json.dumps({"recipe": recipe}))
 
     return jsonify({"message":"Success"}), 200
 
 """
 Manually sets the oven temperature (in Celsius).
 """
-@bp.route("/oven/<oven_id>/setTemperature", methods=['POST'])
+@bp.route("/<oven_id>/setTemperature", methods=['POST'])
 def set_oven_temperature(oven_id=None):
     body = request.json
     if body is None or not body.get('temperature'):
@@ -86,14 +86,14 @@ def set_oven_temperature(oven_id=None):
         return jsonify({"message": f"Bad value. Cannot set temperature."}), 404
 
     topic = mqtt_topics.SET_TEMPERATURE.format(device_id=oven_id)
-    mqtt_manager.publish_message(topic, jsonify.dumps({"temperature": temperature}))
+    mqtt_manager.publish_message(topic, json.dumps({"temperature": temperature}))
 
     return jsonify({"message":"Success"}), 200
 
 """
 Manually sets the oven time (in minutes).
 """
-@bp.route("/oven/<oven_id>/setTime", methods=['POST'])
+@bp.route("/<oven_id>/setTime", methods=['POST'])
 def set_oven_time(oven_id=None):
     body = request.json
     if body is None or not body.get('time'):
@@ -113,6 +113,6 @@ def set_oven_time(oven_id=None):
         return jsonify({"message": f"Bad value. Cannot set time."}), 404
 
     topic = mqtt_topics.SET_TIME.format(device_id=oven_id)
-    mqtt_manager.publish_message(topic, jsonify.dumps({"time": time}))
+    mqtt_manager.publish_message(topic, json.dumps({"time": time}))
 
     return jsonify({"message":"Success"}), 200
