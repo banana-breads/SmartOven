@@ -15,7 +15,89 @@ bp = Blueprint('recipe', __name__, url_prefix='/recipe')
 
 @bp.route('/find', methods=['POST'])
 def find_and_add():
-    # search for recipe containing given title keywords, that is prepared using oven.
+    """
+    Search a new recipe and add it in the oven's database
+    ---
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    type: object
+                    required:
+                        - name
+                    properties:
+                        name:
+                            type: string
+                            example: Banana bread
+    responses:
+        200:
+            description: Successfully found and added a new recipe
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            name:
+                                type: string
+                                example: Test recipe
+                            prep_time:
+                                type: integer
+                                example: 10
+                            prep_details:
+                                type: string
+                                example: Test recipe details
+                            baking_temperature:
+                                type: integer
+                                example: 20
+        400:
+            description: Bad request - Missing required fields for a recipe
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+                                example: Missing fields to search recipe
+        401:
+            description: Unauthorised client
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+                                example: The client is not authorised to search
+
+        404:
+            description: Recipe not found
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+                                example: No recipe with name found
+
+
+        409:
+            description: Conflict - Duplicate recipe
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+                                example: A recipe with the same name already exists
+        
+    """
+    if not request.json or not request.json.get('name'):
+        return jsonify({ 'message': 'Missing fields to search recipe' }), 400
+
     recipeTitle = request.json['name']
     searchParams = {
         'apiKey':SPOONACULAR_API_KEY,
@@ -24,13 +106,17 @@ def find_and_add():
         'instructionsRequired':True,
         'titleMatch':recipeTitle
     }
-    resultObject = requests.request(method="get", url=f"https://api.spoonacular.com/recipes/complexSearch",params=searchParams).content
-    resultObject = json.loads(resultObject)
+    resultObject = None
+    try:
+        resultObject = requests.request(method="get", url=f"https://api.spoonacular.com/recipes/complexSearch",params=searchParams).content
+        resultObject = json.loads(resultObject)
 
-    if (resultObject["totalResults"] == 0):
-        return jsonify({
-            'message':'No recipe with name found'
-        }), 404
+        if (resultObject["totalResults"] == 0):
+            return jsonify({
+                'message':'No recipe with name found'
+            }), 404
+    except:
+        return {'message': 'The client is not authorised to search'}, 401
     
     foundRecipeId = resultObject["results"][0]["id"]
 
@@ -57,7 +143,7 @@ def find_and_add():
     try:
         res = add_recipe(name, oven_time, instructions, oven_temp)
     except DuplicateKeyError:
-          return jsonify({ 'message': 'A recipe with the same name already exists' }), 409
+        return jsonify({ 'message': 'A recipe with the same name already exists' }), 409
 
     return recipe_info
 
