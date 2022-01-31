@@ -256,14 +256,14 @@ def update_recipe(recipe_id=None):
                                 example: Successfully updated recipe with specified id
         400:            
             description: Bad request - Recipe is missing or has unallowed fields
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                message:
-                                    type: string
-                                    example: Request content contains unallowed fields
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+                                example: Request content contains unallowed fields
                                     
         404:
             description: Recipe not found
