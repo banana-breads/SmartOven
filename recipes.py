@@ -7,7 +7,8 @@ bp = Blueprint('recipes', __name__, url_prefix='/recipe')
 
 
 def validate_recipe_body(body):
-    if all([body.get('name'), body.get('prep_time'), body.get('prep_details'), body.get('baking_temperature')]):
+    if all([body.get('name'), body.get('prep_time'), \
+            body.get('prep_details'), body.get('baking_temperature')]):
         return True
     return False
 
@@ -16,7 +17,8 @@ def add_recipe(recipe_name, time, details, temperature):
     db = get_db()
     recipes = db.recipes
     recipe_name = recipe_name.replace(" ", "-")
-    recipe = {'name': recipe_name, 'prep_time': time, 'prep_details': details, 'baking_temperature': temperature}
+    recipe = {'name': recipe_name, 'prep_time': time, \
+              'prep_details': details, 'baking_temperature': temperature}
     result = recipes.insert_one(recipe)
     return result.inserted_id
 
