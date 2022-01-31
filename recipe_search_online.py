@@ -45,8 +45,19 @@ def find_and_add():
     name = foundRecipeData["title"]
     instructions = foundRecipeData["instructions"]
     oven_time, oven_temp = getOvenSettings(instructions, foundRecipeData["analyzedInstructions"][0]["steps"])
-    add_recipe(name, oven_time, instructions, oven_temp)
-    return foundRecipeData
+
+    recipe_info = {
+        "name":name,
+        "prep_time":oven_time,
+        "prep_details":instructions,
+        "baking_temperature":oven_temp
+    }
+
+    res = add_recipe(name, oven_time, instructions, oven_temp)
+
+    if (res[1] == 409):
+        return res
+    return recipe_info
 
 
 def getOvenSettings(instructionsBlock, instructionsList):
