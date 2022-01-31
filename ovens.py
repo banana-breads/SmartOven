@@ -12,6 +12,25 @@ def _check_if_oven_exists(oven_id):
 
 bp = Blueprint('ovens', __name__, url_prefix='/oven')
 
+
+"""
+See current oven info.
+"""
+@bp.route("/<oven_id>", methods=['GET'])
+def get_oven_info(oven_id=None):
+    if not oven_id:
+        return jsonify({"message":"Please specify an oven ID."}), 400
+    
+    if not _check_if_oven_exists(oven_id):
+        return jsonify({"message":"No oven found with id"}), 404
+
+    oven = connected_devices[oven_id]
+    return jsonify({
+        "temperature": connected_devices[oven_id].temperature,
+        "recipe_info": connected_devices[oven_id].recipe_info
+    })
+
+    
 """
 Manage oven state (True if oven is on, False otherwise)
 Oven will start preparing food according to its given settings.
