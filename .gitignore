@@ -1,6 +1,9 @@
 .env
 
 venv/
+venv1/
+
+docs/source/_build/
 
 *.pyc
 __pycache__/

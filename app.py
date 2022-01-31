@@ -11,10 +11,11 @@ from globals import connected_devices, Oven
 import os
 
 import recipes
+import recipe_search_online
 import db
-from constants import MONGO_URI
+from constants import MONGO_URI, MONGO_URI_TEST
 
-from spec import SWAGGER_TEMPLATE, dump_apispecs_to_json
+from spec import SWAGGER_TEMPLATE
 from constants import MONGO_URI, SWAGGER_API_URL, SWAGGER_URL
 from flask_pymongo import PyMongo
 
@@ -26,13 +27,20 @@ swagger = None
 # thread = None
 
 
-def create_app(test_config=None):
+def create_app(test_config=None, testing=None):
     global app, swagger
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        MONGO_URI=MONGO_URI,
-    )
+    if not testing:
+        app.config.from_mapping(
+            SECRET_KEY='dev',
+            MONGO_URI=MONGO_URI,
+        )
+    else:
+        app.config.from_mapping(
+            SECRET_KEY='test',
+            MONGO_URI=MONGO_URI_TEST,
+        )
+
 
     # Setting up Swagger API
     app.config['SWAGGER'] = {
@@ -55,13 +63,11 @@ def create_app(test_config=None):
         pass
 
     db.init_app(app)
-    
     # App blueprints
     app.register_blueprint(recipes.bp)
+    app.register_blueprint(recipe_search_online.bp)
 
-    # Dump Swagger specs to json
-    with app.app_context():
-        dump_apispecs_to_json(swagger)
+    return app
 
 
 def mqtt_setup():
