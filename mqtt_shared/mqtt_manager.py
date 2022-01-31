@@ -19,6 +19,7 @@ def get_client_id():
 def _on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected to MQTT Broker!")
+        print(CONNECT)
         client.publish(CONNECT, get_client_id())
     else:
         print("Failed to connect, return code %d\n", rc)
@@ -95,6 +96,7 @@ def register_callback(sub_topic_filter, callback):
     global _client
 
     if _client is not None:
+        _client.subscribe(sub_topic_filter)
         _client.message_callback_add(sub_topic_filter, callback)
     else:
         print("Client is not initialized. Cannot register callback")

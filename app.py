@@ -73,27 +73,29 @@ def _handle_device_connect(client, userdata, msg):
             topic = msg.topic
             payload = msg.payload.decode()
             data = json.loads(payload)
-            info_type = topic.split('/')[1]
+            info_type = topic.split('/')[-1]
 
             if device_id not in connected_devices:
                 # TODO logging
                 print(f'Device {device_id} not connected')
                 return
-
+            
+            print(msg)
             device = connected_devices[device_id]
             if info_type == 'temperature':
                 device.temperature = data
             elif info_type == 'recipe_details':
                 device.recipe_details = data
 
-        mqtt_manager.register_callback(INFO_PREFIX.format(device_id=device_id) + "/#",_handle_device_info)
+        print("device connected")
+        mqtt_manager.register_callback(mqtt_topics.INFO_PREFIX.format(device_id=device_id) + "/#",_handle_device_info)
 
 
 def _handle_device_disconnect(client, userdata, msg):
     device_id = msg.payload.decode()
     connected_devices.pop(device_id, None)
     print(f'Device disconnected {device_id}')
-    mqtt.unsubscribe(INFO_PREFIX.format(device_id=device_id) + "/#")
+    mqtt_manager.unsubscribe(mqtt_topics.INFO_PREFIX.format(device_id=device_id) + "/#")
 
 
 # Function that every second publishes a message
