@@ -14,7 +14,6 @@ class Oven():
         self.target_temperature = None # int in Celsius
         self.recipe_end_time = datetime.utcnow() # timestamp UTC
         self.recipe_end_time = datetime.utcnow() # timestamp UTC
-        pass
 
 
     def _get_temperature(self):

@@ -16,6 +16,8 @@ from constants import MONGO_URI
 
 swagger = None
 
+# TODO have blueprints in a spepparate module
+
 def create_app(test_config=None):
     global app, swagger
     app = Flask(__name__, instance_relative_config=True)
@@ -51,7 +53,10 @@ def create_app(test_config=None):
 
 
 def _handle_device_connect(client, userdata, msg):
+    client_id = client._client_id.decode()
     device_id = msg.payload.decode()
+    if client_id == device_id:
+        return
 
     if device_id not in connected_devices:
         connected_devices[device_id] = Oven(device_id)
@@ -73,14 +78,12 @@ def _handle_device_connect(client, userdata, msg):
                 print(f'Device {device_id} not connected')
                 return
 
-            print(msg)
             device = connected_devices[device_id]
             if info_type == 'temperature':
                 device.temperature = data
             elif info_type == 'recipe_details':
                 device.recipe_details = data
 
-        print("device connected")
         topic = mqtt_topics.INFO_PREFIX.format(device_id=device_id) + "/#"
         mqtt_manager.register_callback(topic, _handle_device_info)
 

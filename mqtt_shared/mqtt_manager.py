@@ -19,7 +19,6 @@ def get_client_id():
 def _on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected to MQTT Broker!")
-        print(CONNECT)
         client.publish(CONNECT, get_client_id())
     else:
         print("Failed to connect, return code %d\n", rc)
