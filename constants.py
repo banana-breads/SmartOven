@@ -12,3 +12,5 @@ MONGO_URI_TEST = f"mongodb+srv://smartover-iot:{MONGODB_PASSWORD}@smartover-iot.
 # Swagger UI
 SWAGGER_URL = "/docs"
 SWAGGER_API_URL = "/static/swagger.json"
+
+SPOONACULAR_API_KEY = os.getenv("SPOONACULAR")

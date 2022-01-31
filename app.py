@@ -11,6 +11,7 @@ from globals import connected_devices, Oven
 import os
 
 import recipes
+import recipe_search_online
 import db
 from constants import MONGO_URI, MONGO_URI_TEST
 
@@ -64,6 +65,8 @@ def create_app(test_config=None, testing=None):
     db.init_app(app)
     # App blueprints
     app.register_blueprint(recipes.bp)
+    app.register_blueprint(recipe_search_online.bp)
+
     return app
 
 
