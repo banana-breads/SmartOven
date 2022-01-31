@@ -1,3 +1,4 @@
+argparse==1.4.0
 attrs==21.4.0
 bidict==0.21.4
 click==8.0.3

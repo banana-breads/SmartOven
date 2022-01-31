@@ -1,5 +1,6 @@
 # import eventlet
 import json
+import argparse
 # Monkey-patch (required for SocketIO)
 # eventlet.monkey_patch()
 
@@ -25,6 +26,13 @@ app: Flask
 mqtt: Mqtt
 swagger = None
 # thread = None
+
+# Arguments
+parser = argparse.ArgumentParser(description="SmartOven Flask server")
+parser.add_argument('-t', '--test', 
+    help='Run the server in testing mode',
+    action="store_true"
+)
 
 
 def create_app(test_config=None, testing=None):
@@ -154,7 +162,9 @@ def mqtt_listeners_setup():
 
 
 if __name__ == "__main__":
-    create_app()
+    args = parser.parse_args()
+    
+    create_app(testing=args.test)
     mqtt_setup()
     mqtt_listeners_setup()
     # start_background_mqtt()
