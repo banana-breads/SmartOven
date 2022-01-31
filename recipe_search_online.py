@@ -5,6 +5,7 @@ from bson.objectid import ObjectId
 from db import get_db
 from recipes import add_recipe
 from constants import SPOONACULAR_API_KEY
+from pymongo.errors import DuplicateKeyError
 
 import requests
 import json
@@ -27,9 +28,9 @@ def find_and_add():
     resultObject = json.loads(resultObject)
 
     if (resultObject["totalResults"] == 0):
-        return {
+        return jsonify({
             'message':'No recipe with name found'
-        }
+        }), 404
     
     foundRecipeId = resultObject["results"][0]["id"]
 
@@ -53,10 +54,11 @@ def find_and_add():
         "baking_temperature":oven_temp
     }
 
-    res = add_recipe(name, oven_time, instructions, oven_temp)
+    try:
+        res = add_recipe(name, oven_time, instructions, oven_temp)
+    except DuplicateKeyError:
+          return jsonify({ 'message': 'A recipe with the same name already exists' }), 409
 
-    if (res[1] == 409):
-        return res
     return recipe_info
 
 
