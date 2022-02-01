@@ -14,7 +14,7 @@ def handle_mqtt_message(client, userdata, message):
     )
     print(data)
 
-def seltup( app: Flask):
+def setup( app: Flask):
     # Setup connection to mqtt broker
     app.config['MQTT_BROKER_URL'] = 'localhost'
     # default port for non-tls connection
