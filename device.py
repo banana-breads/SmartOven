@@ -17,6 +17,7 @@ def run():
     oven = get_oven()
     oven.set_listeners()
     while True:
+        oven.simulate_sensors()
         oven.publish_sensor_data()
         time.sleep(_PUBLISH_RATE)
 

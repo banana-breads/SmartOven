@@ -16,6 +16,8 @@ STATE = f'{INFO_PREFIX}/state'
 
 # send to server info about current recipe
 RECIPE_DETAILS = f'{INFO_PREFIX}/recipe_details'
+
+RECIPE_DONE = f'{INFO_PREFIX}/recipe_done'
 ################
 
 SETTINGS_PREFIX = f'{PREFIX}/settings'

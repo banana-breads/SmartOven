@@ -20,19 +20,19 @@ See current oven info.
 def get_oven_info(oven_id=None):
     if not oven_id:
         return jsonify({"message":"Please specify an oven ID."}), 400
-    
+
     if not _check_if_oven_exists(oven_id):
         return jsonify({"message":"No oven found with id"}), 404
 
     oven = connected_devices[oven_id]
     return jsonify({
-        "state": connected_devices[oven_id].state["state"],
-        "temperature": connected_devices[oven_id].temperature,
-        "time":connected_devices[oven_id].time,
-        "recipe": connected_devices[oven_id].recipe_info
+        "state": oven.state["state"],
+        "temperature": oven.temperature,
+        "time": oven.time,
+        "recipe": oven.recipe_info
     })
 
-    
+
 """
 Manage oven state (True if oven is on, False otherwise)
 Oven will start preparing food according to its given settings.
@@ -40,8 +40,7 @@ Oven will start preparing food according to its given settings.
 @bp.route("/<oven_id>/state", methods=['POST'])
 def set_oven_state(oven_id=None):
     body = request.json
-    print(body)
-    if body is None or not ('state' in body):
+    if body is None or 'state' not in body:
         return jsonify({ 'message': f'Missing state parameter.' \
                         f'No action taken on oven {oven_id}.' }), 400
 
@@ -67,7 +66,7 @@ def set_oven_state(oven_id=None):
 Sets the oven to the cooking parameters specified in the recipe
 (cooking temperature, cooking time).
 """
-@bp.route("/<oven_id>/setRecipe/<recipe_name>", methods=['POST'])
+@bp.route("/<oven_id>/recipe/<recipe_name>", methods=['POST'])
 def set_oven_recipe(oven_id=None, recipe_name=None):
     if not _check_if_oven_exists(oven_id):
         return jsonify({"message": f"Oven with id {oven_id} does not exist." \
@@ -87,7 +86,7 @@ def set_oven_recipe(oven_id=None, recipe_name=None):
 """
 Manually sets the oven temperature (in Celsius).
 """
-@bp.route("/<oven_id>/setTemperature", methods=['POST'])
+@bp.route("/<oven_id>/temperature", methods=['POST'])
 def set_oven_temperature(oven_id=None):
     body = request.json
     if body is None or 'temperature' not in body:
@@ -114,10 +113,10 @@ def set_oven_temperature(oven_id=None):
 """
 Manually sets the oven time (in minutes).
 """
-@bp.route("/<oven_id>/setTime", methods=['POST'])
+@bp.route("/<oven_id>/time", methods=['POST'])
 def set_oven_time(oven_id=None):
     body = request.json
-    if body is None or not body.get('time'):
+    if body is None or 'time' not in body:
         return jsonify({ 'message': f'Missing time parameter.' \
                         ' No action taken on oven {oven_id}.' }), 400
     if not _check_if_oven_exists(oven_id):
