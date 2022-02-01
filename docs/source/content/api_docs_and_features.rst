@@ -190,6 +190,8 @@ Deleting of the recipes from ovens database.
 Recipe Search
 #############
 
+Our application can make a request to an external API that contains a big database of recipes and search through them.
+
 .. POST SEARCH
 .. http:post:: /recipe/find
 
@@ -227,3 +229,208 @@ Recipe Search
    :statuscode 401: The client is not authorized to search
    :statuscode 404: Recipe was not found online
    :statuscode 409: The recipe with the specified name already exists
+
+
+###########
+Oven Status
+###########
+
+User can check oven's status (temperature, time left for baking, if it's on/off, current recipe).
+
+.. GET OVEN INFO
+.. http:get:: /oven/{oven_id}
+
+   Returns the status of the oven with the specified name.
+
+   **Example request**
+
+   .. sourcecode:: http
+
+      GET /oven/oven-33d6ee15-6753-496b-b838-517ef329b815 HTTP/1.1
+      Host: localhost:5000
+      Accept: application/json
+   
+   **Example response**
+   
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+         "recipe": {},
+         "state": false,
+         "temperature": {
+            "current_temperature": 22,
+            "target_temperature": 0
+         },
+         "time": {
+            "target_time": 0,
+            "time_elapsed": 0,
+            "time_left": 0
+         }
+      }
+   
+   :statuscode 200: Successfully returned the specified oven's info
+   :statuscode 400: Missing oven ID
+   :statuscode 404: Oven not found
+
+
+##################
+Selecting a recipe
+##################
+
+The user can select a recipe from the database and bake it.
+
+.. POST SELECT RECIPE
+.. http:post:: /oven/{oven_id}/recipe/{recipe_name}
+
+   Assigns the specified recipe to the oven with specified id.
+
+   **Example request**
+
+   .. sourcecode:: http
+
+      POST /oven/oven-33d6ee15-6753-496b-b838-517ef329b815/recipe/Banana-bread HTTP/1.1
+      Host: localhost:5000
+      Accept: application/json
+   
+   **Example response**
+   
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+         "message": "Success"
+      }
+   
+   :statuscode 200: Successfully added the recipe to the oven
+   :statuscode 404: Not found oven/recipe with specified id/name
+
+
+#######################
+Turning the oven on/off
+#######################
+
+The user can turn on and off the oven
+
+.. POST STATE
+.. http:post:: /oven/{oven_id}/state
+
+   Turns the oven on or off, if it wasn't already.
+
+   **Example request**
+
+   .. sourcecode:: http
+
+      POST /oven/oven-33d6ee15-6753-496b-b838-517ef329b815/state
+      Host: localhost:5000
+      Accept: application/json
+
+      {
+         "state": true
+      }
+   
+   **Example response**
+   
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+         "message": "Success"
+      }
+   
+   :statuscode 200: Successfully changed oven's state
+   :statuscode 400: Missing state parameter or bad state value
+   :statuscode 404: Not found oven with specified id
+
+
+#########################
+Manage oven's temperature
+#########################
+
+The user can manage the temperature of the oven
+
+.. POST STATE
+.. http:post:: /oven/{oven_id}/temperature
+
+   Changes the temperature of oven with the specified one.
+
+   **Example request**
+
+   .. sourcecode:: http
+
+      POST /oven/oven-33d6ee15-6753-496b-b838-517ef329b815/temperature
+      Host: localhost:5000
+      Accept: application/json
+
+      {
+         "temperature": 50
+      }
+   
+   **Example response**
+   
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+         "message": "Success"
+      }
+   
+   :statuscode 200: Successfully changed oven's temperature
+   :statuscode 400: Missing temperature parameter or bad state value
+   :statuscode 404: Not found oven with specified id
+
+
+##################
+Manage oven's time
+##################
+
+The user can manage the time of the oven
+
+.. POST STATE
+.. http:post:: /oven/{oven_id}/time
+
+   Changes the time of oven with the specified one.
+
+   **Example request**
+
+   .. sourcecode:: http
+
+      POST /oven/oven-33d6ee15-6753-496b-b838-517ef329b815/time
+      Host: localhost:5000
+      Accept: application/json
+
+      {
+         "time": 50
+      }
+   
+   **Example response**
+   
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+         "message": "Success"
+      }
+   
+   :statuscode 200: Successfully changed oven's time
+   :statuscode 400: Missing time parameter or bad state value
+   :statuscode 404: Not found oven with specified id
+
+
+
+
