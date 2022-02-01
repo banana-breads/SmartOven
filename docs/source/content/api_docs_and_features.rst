@@ -327,7 +327,7 @@ The user can turn on and off the oven
 
    .. sourcecode:: http
 
-      POST /oven/oven-33d6ee15-6753-496b-b838-517ef329b815/state
+      POST /oven/oven-33d6ee15-6753-496b-b838-517ef329b815/state HTTP/1.1
       Host: localhost:5000
       Accept: application/json
 
@@ -367,7 +367,7 @@ The user can manage the temperature of the oven
 
    .. sourcecode:: http
 
-      POST /oven/oven-33d6ee15-6753-496b-b838-517ef329b815/temperature
+      POST /oven/oven-33d6ee15-6753-496b-b838-517ef329b815/temperature HTTP/1.1
       Host: localhost:5000
       Accept: application/json
 
@@ -407,7 +407,7 @@ The user can manage the time of the oven
 
    .. sourcecode:: http
 
-      POST /oven/oven-33d6ee15-6753-496b-b838-517ef329b815/time
+      POST /oven/oven-33d6ee15-6753-496b-b838-517ef329b815/time HTTP/1.1
       Host: localhost:5000
       Accept: application/json
 
