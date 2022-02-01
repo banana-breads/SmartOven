@@ -113,7 +113,7 @@ def set_oven_state(oven_id=None):
                             example: true
     responses:
         200:
-            description: Successfully added a new recipe
+            description: Successfully changed oven's state
             content:
                 application/json:
                     schema:
