@@ -1,23 +1,24 @@
----------- coverage: platform linux, python 3.10.1-final-0 -----------
+---------- coverage: platform linux, python 3.8.10-final-0 -----------
 Name                                     Stmts   Miss  Cover
 ------------------------------------------------------------
-SmartOven/app.py                            78     41    47%
+SmartOven/app.py                            77     15    81%
 SmartOven/constants.py                       9      0   100%
 SmartOven/db.py                             25      2    92%
-SmartOven/device.py                         18     18     0%
-SmartOven/globals.py                         9      5    44%
+SmartOven/device.py                         18      1    94%
+SmartOven/globals.py                         9      0   100%
 SmartOven/mqtt.py                           20     20     0%
 SmartOven/mqtt_shared/__init__.py            0      0   100%
-SmartOven/mqtt_shared/mqtt_manager.py       67     47    30%
+SmartOven/mqtt_shared/mqtt_manager.py       66     24    64%
 SmartOven/mqtt_shared/mqtt_topics.py        15      0   100%
 SmartOven/oven/__init__.py                   0      0   100%
-SmartOven/oven/oven.py                     122    122     0%
-SmartOven/ovens.py                          80     58    28%
-SmartOven/recipe_search_online.py           73     13    82%
+SmartOven/oven/oven.py                     122     51    58%
+SmartOven/ovens.py                          73      5    93%
+SmartOven/recipe_search_online.py           73     14    81%
 SmartOven/recipes.py                        94      7    93%
 SmartOven/spec.py                           12      8    33%
 SmartOven/tests/test_client.py              17      0   100%
-SmartOven/tests/test_recipes.py             71      2    97%
-SmartOven/tests/test_search_recipes.py      26      0   100%
+SmartOven/tests/test_ovens.py              123      1    99%
+SmartOven/tests/test_recipes.py             71      7    90%
+SmartOven/tests/test_search_recipes.py      26      2    92%
 ------------------------------------------------------------
-TOTAL                                      736    343    53%
+TOTAL                                      850    157    82%

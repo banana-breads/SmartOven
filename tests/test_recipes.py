@@ -1,5 +1,6 @@
 from test_client import client
 
+
 class TestPostRecipes:
 
     def test_post_recipes_without_required_fields(self, client):
@@ -92,3 +93,4 @@ class TestDeleteRecipes:
     def test_delete_not_found_recipe(self, client):
         response = client.delete('/recipe/qwerty', follow_redirects=True)
         assert response.status_code == 404
+

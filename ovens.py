@@ -18,15 +18,13 @@ See current oven info.
 """
 @bp.route("/<oven_id>", methods=['GET'])
 def get_oven_info(oven_id=None):
-    if not oven_id:
-        return jsonify({"message":"Please specify an oven ID."}), 400
 
     if not _check_if_oven_exists(oven_id):
         return jsonify({"message":"No oven found with id"}), 404
 
     oven = connected_devices[oven_id]
     return jsonify({
-        "state": oven.state["state"],
+        "state": oven.state,
         "temperature": oven.temperature,
         "time": oven.time,
         "recipe": oven.recipe_info
@@ -55,7 +53,7 @@ def set_oven_state(oven_id=None):
     elif new_state == False:
         result = f"Oven with id {oven_id} has stopped cooking."
     else:
-        return jsonify({"message": f"Bad value. Cannot change state."}), 404
+        return jsonify({"message": f"Bad value. Cannot change state."}), 400
 
     topic = mqtt_topics.SET_STATE.format(device_id=oven_id)
     mqtt_manager.publish_message(topic, json.dumps({"state": new_state}))
@@ -91,7 +89,7 @@ def set_oven_temperature(oven_id=None):
     body = request.json
     if body is None or 'temperature' not in body:
         return jsonify({ 'message': f'Missing temperature parameter.' \
-                        'No action taken on oven {oven_id}.' }), 400
+                        f'No action taken on oven {oven_id}.' }), 400
 
     if not _check_if_oven_exists(oven_id):
         return jsonify({"message": f"Oven with id {oven_id} does not exist." \
@@ -101,9 +99,9 @@ def set_oven_temperature(oven_id=None):
         temperature = int(body["temperature"])
         if temperature < 0 or temperature > 250:
             return jsonify({"message": f"Oven cannot run on temperatures " \
-                " negative or hotter than 250C. Cannot set temperature."}), 404
+                " negative or hotter than 250C. Cannot set temperature."}), 400
     except:
-        return jsonify({"message": f"Bad value. Cannot set temperature."}), 404
+        return jsonify({"message": f"Bad value. Cannot set temperature."}), 400
 
     topic = mqtt_topics.SET_TEMPERATURE.format(device_id=oven_id)
     mqtt_manager.publish_message(topic, json.dumps({"temperature": temperature}))
@@ -118,7 +116,7 @@ def set_oven_time(oven_id=None):
     body = request.json
     if body is None or 'time' not in body:
         return jsonify({ 'message': f'Missing time parameter.' \
-                        ' No action taken on oven {oven_id}.' }), 400
+                        f' No action taken on oven {oven_id}.' }), 400
     if not _check_if_oven_exists(oven_id):
         return jsonify({"message": f"Oven with id {oven_id} does not exist." \
                         " Cannot set time."}), 404
