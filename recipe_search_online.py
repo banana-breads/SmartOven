@@ -133,10 +133,16 @@ def find_and_add():
     instructions = foundRecipeData["instructions"]
     oven_time, oven_temp = getOvenSettings(instructions, foundRecipeData["analyzedInstructions"][0]["steps"])
 
+    # if not provided by api, set some defaults
+    if oven_time == 0:
+        time = 30
+    if oven_temp == 0:
+        oven_temp = 150
+
     recipe_info = {
         "name":name,
         "prep_time":oven_time,
-        "prep_details":instructions,
+        "prep_details":_strip_html(instructions),
         "baking_temperature":oven_temp
     }
 
@@ -147,6 +153,12 @@ def find_and_add():
 
     return recipe_info
 
+"""
+Helper that clears instructions of html tags
+"""
+def _strip_html(data):
+    p = re.compile(r'<.*?>')
+    return p.sub('', data)
 
 def getOvenSettings(instructionsBlock, instructionsList):
     oven_temp = 0
