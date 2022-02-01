@@ -1,17 +1,19 @@
 ---------- coverage: platform linux, python 3.8.10-final-0 -----------
-Name                              Stmts   Miss  Cover
------------------------------------------------------
-SmartOven/app.py                     75     42    44%
-SmartOven/constants.py                8      0   100%
-SmartOven/db.py                      25      2    92%
-SmartOven/device/__init__.py          0      0   100%
-SmartOven/device/__main__.py         46     46     0%
-SmartOven/device/oven.py             20     20     0%
-SmartOven/globals.py                  7      3    57%
-SmartOven/mqtt.py                    20     20     0%
-SmartOven/recipes.py                 90      7    92%
-SmartOven/spec.py                     1      0   100%
-SmartOven/tests/test_client.py       17      0   100%
-SmartOven/tests/test_recipes.py      71      2    97%
------------------------------------------------------
-TOTAL                               380    142    63%
+Name                                     Stmts   Miss  Cover
+------------------------------------------------------------
+SmartOven/app.py                            77     42    45%
+SmartOven/constants.py                       9      0   100%
+SmartOven/db.py                             25      2    92%
+SmartOven/device/__init__.py                 0      0   100%
+SmartOven/device/__main__.py                46     46     0%
+SmartOven/device/oven.py                    20     20     0%
+SmartOven/globals.py                         7      3    57%
+SmartOven/mqtt.py                           20     20     0%
+SmartOven/recipe_search_online.py           73     13    82%
+SmartOven/recipes.py                        90      6    93%
+SmartOven/spec.py                            1      0   100%
+SmartOven/tests/test_client.py              17      0   100%
+SmartOven/tests/test_recipes.py             71      2    97%
+SmartOven/tests/test_search_recipes.py      27      0   100%
+------------------------------------------------------------
+TOTAL                                      483    154    68%
