@@ -35,19 +35,18 @@ paths:
         content:
           application/json:
             schema:
-              example:
-                baking_temperature: 20
-                name: test recipe
-                prep_details: Test recipe details
-                prep_time: 10
               properties:
                 baking_temperature:
+                  example: 20
                   type: integer
                 name:
+                  example: Test recipe
                   type: string
                 prep_details:
+                  example: Test recipe details
                   type: string
                 prep_time:
+                  example: 10
                   type: integer
               required:
               - name
@@ -91,6 +90,81 @@ paths:
                 type: object
           description: Conflict - Duplicate recipe
       summary: Add a new recipe in the oven's database
+  /recipe/find:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  example: Banana bread
+                  type: string
+              required:
+              - name
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  baking_temperature:
+                    example: 20
+                    type: integer
+                  name:
+                    example: Test recipe
+                    type: string
+                  prep_details:
+                    example: Test recipe details
+                    type: string
+                  prep_time:
+                    example: 10
+                    type: integer
+                type: object
+          description: Successfully found and added a new recipe
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    example: Missing fields to search recipe
+                    type: string
+                type: object
+          description: Bad request - Missing required fields for a recipe
+        '401':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    example: The client is not authorised to search
+                    type: string
+                type: object
+          description: Unauthorised client
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    example: No recipe with name found
+                    type: string
+                type: object
+          description: Recipe not found
+        '409':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    example: A recipe with the same name already exists
+                    type: string
+                type: object
+          description: Conflict - Duplicate recipe
+      summary: Search a new recipe and add it in the oven's database
   /recipe/{recipe_id}:
     delete:
       parameters:
@@ -154,6 +228,16 @@ paths:
                     type: string
                 type: object
           description: Successfully returned the specified recipe
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    example: Request content contains unallowed fields
+                    type: string
+                type: object
+          description: Bad request - Recipe is missing or has unallowed fields
         '404':
           content:
             application/json:
@@ -182,7 +266,6 @@ paths:
         name: recipe_name
         required: true
         schema:
-          example: test-recipe
           type: string
       responses:
         '200':

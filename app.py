@@ -16,7 +16,7 @@ import recipe_search_online
 import db
 from constants import MONGO_URI, MONGO_URI_TEST
 
-from spec import SWAGGER_TEMPLATE
+from spec import SWAGGER_TEMPLATE, dump_apispecs_to_json
 from constants import MONGO_URI, SWAGGER_API_URL, SWAGGER_URL
 from flask_pymongo import PyMongo
 
@@ -74,6 +74,10 @@ def create_app(test_config=None, testing=None):
     # App blueprints
     app.register_blueprint(recipes.bp)
     app.register_blueprint(recipe_search_online.bp)
+
+    # Save OpenAPI specs
+    with app.app_context():
+        dump_apispecs_to_json(swagger)
 
     return app
 

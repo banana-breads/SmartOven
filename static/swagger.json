@@ -9,6 +9,124 @@
     }
   },
   "paths": {
+    "/recipe/find": {
+      "post": {
+        "summary": "Search a new recipe and add it in the oven's database",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Banana bread"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully found and added a new recipe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Test recipe"
+                    },
+                    "prep_time": {
+                      "type": "integer",
+                      "example": 10
+                    },
+                    "prep_details": {
+                      "type": "string",
+                      "example": "Test recipe details"
+                    },
+                    "baking_temperature": {
+                      "type": "integer",
+                      "example": 20
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Missing required fields for a recipe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Missing fields to search recipe"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorised client",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The client is not authorised to search"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recipe not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No recipe with name found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Duplicate recipe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "A recipe with the same name already exists"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/recipe": {
       "get": {
         "summary": "Get all recipes that are saved in the oven's database",
@@ -61,23 +179,21 @@
                 ],
                 "properties": {
                   "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Test recipe"
                   },
                   "prep_time": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 10
                   },
                   "prep_details": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Test recipe details"
                   },
                   "baking_temperature": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 20
                   }
-                },
-                "example": {
-                  "name": "test recipe",
-                  "prep_time": 10,
-                  "prep_details": "Test recipe details",
-                  "baking_temperature": 20
                 }
               }
             }
@@ -209,8 +325,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "example": "test-recipe"
+              "type": "string"
             }
           }
         ]
@@ -254,6 +369,22 @@
                     "message": {
                       "type": "string",
                       "example": "Successfully updated recipe with specified id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Recipe is missing or has unallowed fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Request content contains unallowed fields"
                     }
                   }
                 }

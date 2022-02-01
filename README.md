@@ -125,6 +125,10 @@ To run the Flask server, start it with
 ```bash
 python app.py
 ```
+or you can run it in test mode (be sure to remove all of the elements from the test database you are running in test mode):
+```bash
+python app.py --test 
+```
 
 #### Swagger API
 To access the Swagger API, access [http://localhost:5000/apidocs/]() and enjoy all of your oven's features.
