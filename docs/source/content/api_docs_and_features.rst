@@ -185,3 +185,45 @@ Deleting of the recipes from ovens database.
    :statuscode 200: Successfully deleted the recipe
    :statuscode 409: Recipe does not exist
    
+
+#############
+Recipe Search
+#############
+
+.. POST SEARCH
+.. http:post:: /recipe/find
+
+   Searches for a new recipe online and if one recipe has been found, take it and add it to oven's database, if it doesn't exist already.
+
+   **Example request**
+
+   .. sourcecode:: http
+
+      POST /recipe/find HTTP/1.1
+      Host: localhost:5000
+      Accept: application/json
+      
+      {
+         "name": "Banana bread" 
+      }
+   
+   **Example response**
+   
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+         "name": "Banana bread",
+         "prep_time": 10,
+         "prep_details": "Details banana bread preparation",
+         "baking_temperature": 50 
+      }
+   
+   :statuscode 200: Successfully found and added the searched recipe
+   :statuscode 400: Missing fields to search for recipe
+   :statuscode 401: The client is not authorized to search
+   :statuscode 404: Recipe was not found online
+   :statuscode 409: The recipe with the specified name already exists

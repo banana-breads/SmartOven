@@ -1,5 +1,6 @@
 # import eventlet
 import json
+import argparse
 # Monkey-patch (required for SocketIO)
 # eventlet.monkey_patch()
 
@@ -15,7 +16,7 @@ import recipe_search_online
 import db
 from constants import MONGO_URI, MONGO_URI_TEST
 
-from spec import SWAGGER_TEMPLATE
+from spec import SWAGGER_TEMPLATE, dump_apispecs_to_json
 from constants import MONGO_URI, SWAGGER_API_URL, SWAGGER_URL
 from flask_pymongo import PyMongo
 
@@ -25,6 +26,13 @@ app: Flask
 mqtt: Mqtt
 swagger = None
 # thread = None
+
+# Arguments
+parser = argparse.ArgumentParser(description="SmartOven Flask server")
+parser.add_argument('-t', '--test', 
+    help='Run the server in testing mode',
+    action="store_true"
+)
 
 
 def create_app(test_config=None, testing=None):
@@ -66,6 +74,10 @@ def create_app(test_config=None, testing=None):
     # App blueprints
     app.register_blueprint(recipes.bp)
     app.register_blueprint(recipe_search_online.bp)
+
+    # Save OpenAPI specs
+    with app.app_context():
+        dump_apispecs_to_json(swagger)
 
     return app
 
@@ -154,7 +166,9 @@ def mqtt_listeners_setup():
 
 
 if __name__ == "__main__":
-    create_app()
+    args = parser.parse_args()
+    
+    create_app(testing=args.test)
     mqtt_setup()
     mqtt_listeners_setup()
     # start_background_mqtt()
