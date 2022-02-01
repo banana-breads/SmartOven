@@ -7,12 +7,15 @@ PREFIX = 'BananaBreadSmartOven/{device_id}'
 
 INFO_PREFIX = f'{PREFIX}/info'
 
-# constantly send data from temperature sensor
+# constantly send data from sensors
 TEMPERATURE = f'{INFO_PREFIX}/temperature'
 
-# constantly send to server info about current recipe
-RECIPE_DETAILS = f'{INFO_PREFIX}/recipe_details'
+TIME = f'{INFO_PREFIX}/time'
 
+STATE = f'{INFO_PREFIX}/state'
+
+# send to server info about current recipe
+RECIPE_DETAILS = f'{INFO_PREFIX}/recipe_details'
 ################
 
 SETTINGS_PREFIX = f'{PREFIX}/settings'
@@ -26,3 +29,5 @@ SET_RECIPE = f'{SETTINGS_PREFIX}/set_recipe'
 SET_TEMPERATURE = f'{SETTINGS_PREFIX}/set_temperature'
 # send instructions to change oven cooking time
 SET_TIME = f'{SETTINGS_PREFIX}/set_time'
+
+GET_RECIPE_DETAILS = f'{SETTINGS_PREFIX}/get_recipe_details'

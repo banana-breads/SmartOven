@@ -6,7 +6,9 @@
 class Oven:
     def __init__(self, device_id):
         self.id = device_id
-        self.temperature = 0
+        self.temperature = {}
+        self.time = {}
+        self.state = False
         self.recipe_info = {}
 
 

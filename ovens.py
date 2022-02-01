@@ -26,8 +26,10 @@ def get_oven_info(oven_id=None):
 
     oven = connected_devices[oven_id]
     return jsonify({
+        "state": connected_devices[oven_id].state["state"],
         "temperature": connected_devices[oven_id].temperature,
-        "recipe_info": connected_devices[oven_id].recipe_info
+        "time":connected_devices[oven_id].time,
+        "recipe": connected_devices[oven_id].recipe_info
     })
 
     
@@ -39,7 +41,7 @@ Oven will start preparing food according to its given settings.
 def set_oven_state(oven_id=None):
     body = request.json
     print(body)
-    if body is None or not body.get('state'):
+    if body is None or not ('state' in body):
         return jsonify({ 'message': f'Missing state parameter.' \
                         f'No action taken on oven {oven_id}.' }), 400
 
@@ -78,7 +80,7 @@ def set_oven_recipe(oven_id=None, recipe_name=None):
                         " Cannot set recipe."}), 404
 
     topic = mqtt_topics.SET_RECIPE.format(device_id=oven_id)
-    mqtt_manager.publish_message(topic, json.dumps({"recipe": recipe}))
+    mqtt_manager.publish_message(topic, json.dumps(recipe))
 
     return jsonify({"message":"Success"}), 200
 
@@ -88,7 +90,7 @@ Manually sets the oven temperature (in Celsius).
 @bp.route("/<oven_id>/setTemperature", methods=['POST'])
 def set_oven_temperature(oven_id=None):
     body = request.json
-    if body is None or not body.get('temperature'):
+    if body is None or 'temperature' not in body:
         return jsonify({ 'message': f'Missing temperature parameter.' \
                         'No action taken on oven {oven_id}.' }), 400
 
@@ -127,9 +129,9 @@ def set_oven_time(oven_id=None):
         # no bigger than 12 hours
         if time < 0 or time > 720:
             return jsonify({"message": f"Cannot cook food for more than 12" \
-                            " hours or negative values. Cannot set time."}), 404
+                            " hours or negative values. Cannot set time."}), 400
     except:
-        return jsonify({"message": f"Bad value. Cannot set time."}), 404
+        return jsonify({"message": f"Bad value. Cannot set time."}), 400
 
     topic = mqtt_topics.SET_TIME.format(device_id=oven_id)
     mqtt_manager.publish_message(topic, json.dumps({"time": time}))

@@ -72,7 +72,8 @@ def _handle_device_connect(client, userdata, msg):
             payload = msg.payload.decode()
             data = json.loads(payload)
             info_type = topic.split('/')[-1]
-
+            
+            print(data)
             if device_id not in connected_devices:
                 # TODO logging
                 print(f'Device {device_id} not connected')
@@ -82,8 +83,13 @@ def _handle_device_connect(client, userdata, msg):
             if info_type == 'temperature':
                 device.temperature = data
             elif info_type == 'recipe_details':
-                device.recipe_details = data
+                device.recipe_info = data
+            elif info_type == 'time':
+                device.time = data
+            elif info_type == 'state':
+                device.state = data
 
+        
         topic = mqtt_topics.INFO_PREFIX.format(device_id=device_id) + "/#"
         mqtt_manager.register_callback(topic, _handle_device_info)
 
