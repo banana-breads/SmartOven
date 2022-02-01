@@ -7,24 +7,39 @@ import os
 
 import recipes
 import ovens
+import recipe_search_online
 import db
 from mqtt_shared import mqtt_manager, mqtt_topics
-from constants import MONGO_URI
+from constants import MONGO_URI, MONGO_URI_TEST
+import argparse
 
-from spec import SWAGGER_TEMPLATE
-from constants import MONGO_URI
+from spec import SWAGGER_TEMPLATE, dump_apispecs_to_json
+from flask_pymongo import PyMongo
 
 swagger = None
 
 # TODO have blueprints in a spepparate module
 
-def create_app(test_config=None):
+# Arguments
+parser = argparse.ArgumentParser(description="SmartOven Flask server")
+parser.add_argument('-t', '--test', 
+    help='Run the server in testing mode',
+    action="store_true"
+)
+
+def create_app(test_config=None, testing=None):
     global app, swagger
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        MONGO_URI=MONGO_URI,
-    )
+    if not testing:
+        app.config.from_mapping(
+            SECRET_KEY='dev',
+            MONGO_URI=MONGO_URI,
+        )
+    else:
+        app.config.from_mapping(
+            SECRET_KEY='test',
+            MONGO_URI=MONGO_URI_TEST,
+        )
 
     # Setting up Swagger API
     app.config['SWAGGER'] = {
@@ -50,7 +65,12 @@ def create_app(test_config=None):
     # App blueprints
     app.register_blueprint(recipes.bp)
     app.register_blueprint(ovens.bp)
+    app.register_blueprint(recipe_search_online.bp)
 
+    # Save OpenAPI specs
+    # with app.app_context():
+    #     dump_apispecs_to_json(swagger)
+    return app
 
 def _handle_device_connect(client, userdata, msg):
     client_id = client._client_id.decode()
@@ -106,7 +126,8 @@ def _handle_device_disconnect(client, userdata, msg):
 
 
 if __name__ == "__main__":
-    create_app()
+    args = parser.parse_args()
+    create_app(testing=args.test)
     mqtt_manager.start("server", 1, [
         (mqtt_topics.CONNECT, _handle_device_connect),
         (mqtt_topics.DISCONNECT, _handle_device_disconnect)
