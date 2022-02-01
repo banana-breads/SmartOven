@@ -4,6 +4,7 @@
 [![Contributors][contributors-shield]][contributors-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
+[![Forks][forks-shield]][forks-url]
 [![MIT License][license-shield]][license-url]
 
 <h3 align="center">SmartOven</h3>
@@ -182,3 +183,6 @@ Some resources we found helpful and we want to give credit to are:
 
 [license-shield]: https://img.shields.io/github/license/banana-breads/SmartOven.svg?style=for-the-badge
 [license-url]: https://github.com/banana-breads/SmartOven/blob/master/LICENSE
+
+[forks-shield]: https://img.shields.io/github/forks/banana-breads/SmartOven.svg?style=for-the-badge
+[forks-url]: https://github.com/banana-breads/SmartOven/network/members
