@@ -13,6 +13,7 @@ def validate_recipe_body(body):
         return True
     return False
 
+
 def validate_recipe_for_update(body):
     if len(body) > 4:
         return False
@@ -21,15 +22,6 @@ def validate_recipe_for_update(body):
         if key not in allowed_keys:
             return False
     return True
-
-
-def add_recipe(recipe_name, time, details, temperature):
-    db = get_db()
-    recipes = db.recipes
-    recipe_name = recipe_name.replace(" ", "-")
-    recipe = {'name': recipe_name, 'prep_time': time, 'prep_details': details, 'baking_temperature': temperature}
-    result = recipes.insert_one(recipe)
-    return result.inserted_id
 
 
 def get_recipes():
@@ -302,6 +294,19 @@ def update_recipe(recipe_id=None):
     except InvalidId:
         return jsonify({ "message": "A recipe with the specified id does not exist"}), 404
     return jsonify({"message": f"Updated recipe with id {recipe_id}"})
+
+
+def add_recipe(recipe_name, time, details, temperature):
+    db = get_db()
+    recipes = db.recipes
+    recipe_name = recipe_name.replace(" ", "-")
+    if time == 0:
+        time = 30
+    if temperature == 0:
+        temperature = 150
+    recipe = {'name': recipe_name, 'prep_time': time, 'prep_details': details, 'baking_temperature': temperature}
+    result = recipes.insert_one(recipe)
+    return result.inserted_id
 
 
 @bp.route('/<recipe_id>', methods=['DELETE'])
