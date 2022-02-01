@@ -131,6 +131,14 @@ or you can run it in test mode (be sure to remove all of the elements from the t
 python app.py --test 
 ```
 
+To create a new device, run
+```bash
+python device.py
+```
+if the server exists, it will connect automatically.
+
+
+
 #### Swagger API
 To access the Swagger API, access [http://localhost:5000/apidocs/]() and enjoy all of your oven's features.
 <p align="right">(<a href="#top">back to top</a>)</p>
