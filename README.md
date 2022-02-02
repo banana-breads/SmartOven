@@ -169,6 +169,7 @@ cd ..
 ```bash
 pytest --cov=SmartOven SmartOven/tests/
 ```
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- LICENSE -->
 ## License
