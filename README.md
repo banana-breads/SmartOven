@@ -4,6 +4,7 @@
 [![Contributors][contributors-shield]][contributors-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
+[![Forks][forks-shield]][forks-url]
 [![MIT License][license-shield]][license-url]
 
 <h3 align="center">SmartOven</h3>
@@ -30,6 +31,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#usage">Testing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -49,6 +51,7 @@ SmartOven's developers are
 
 This project was developed during the Software Engineering Course at University of Bucharest under guidance of our teacher <a href="https://github.com/raresito">Rareș Cristea</a>.
 
+For more information about our project you can also check our [SmartOven's online Documentation](https://smartoven.readthedocs.io/en/latest/) and the [Customer Requirements Analysis Document](https://github.com/banana-breads/SmartOven/blob/update-customer-analysis-doc/docs/Document_de_analiza_a_cerintelor_clientului__SmartOven.pdf).
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Built With
@@ -130,8 +133,49 @@ or you can run it in test mode (be sure to remove all of the elements from the t
 python app.py --test 
 ```
 
+To create a new device, run
+```bash
+python device.py
+```
+if the server exists, it will connect automatically.
+
 #### Swagger API
 To access the Swagger API, access [http://localhost:5000/apidocs/]() and enjoy all of your oven's features.
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Testing
+You can run our tests by:
+
+1. Starting the MQTT Broker service by running:
+```bash
+mosquitto
+```
+
+2. Activating the environment using
+```bash
+.\venv\Scripts\activate # for Windows
+source venv/bin/activate # for Unix
+```
+
+3. Using this command in the project root folder:
+```bash
+pytest tests/
+```
+
+4. If you want to run the tests and check the coverage you can run:
+```bash
+cd ..
+
+pytest --cov=SmartOven SmartOven/tests/
+```
+
+### Automation tests
+
+To run the automation tests provided for this project, you should have a Postman account
+and access [this link](https://smartoven.postman.co/workspace/SmartOven-IoT~3965cbb7-e5be-43a9-8974-8701218a8c51>).
+to run them. Select the environment coresponding to the collection you want to run and after than, select a collection 
+and choose `Run collection`.
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- LICENSE -->
@@ -182,3 +226,6 @@ Some resources we found helpful and we want to give credit to are:
 
 [license-shield]: https://img.shields.io/github/license/banana-breads/SmartOven.svg?style=for-the-badge
 [license-url]: https://github.com/banana-breads/SmartOven/blob/master/LICENSE
+
+[forks-shield]: https://img.shields.io/github/forks/banana-breads/SmartOven.svg?style=for-the-badge
+[forks-url]: https://github.com/banana-breads/SmartOven/network/members
