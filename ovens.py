@@ -96,27 +96,29 @@ def get_all_ovens(oven_id=None):
             content:
                 application/json:
                     schema:
-                        type: object
-                        required:
-                            - state
-                        properties:
-                            state:
-                                type: string
-                            temperature:
-                                type: integer
-                            time:
-                                type: integer
-                            recipe:
-                                type: object
-                                properties:
-                                    name:
-                                        type: string
-                                    prep_time:
-                                        type: integer
-                                    prep_details:
-                                        type: string
-                                    baking_temperature:
-                                        type: integer
+                        type: array
+                        items:
+                            type: object
+                            properties:
+                                id:
+                                    type: string
+                                state:
+                                    type: string
+                                temperature:
+                                    type: integer
+                                time:
+                                    type: integer
+                                recipe:
+                                    type: object
+                                    properties:
+                                        name:
+                                            type: string
+                                        prep_time:
+                                            type: integer
+                                        prep_details:
+                                            type: string
+                                        baking_temperature:
+                                            type: integer
     """
     response = []
 
