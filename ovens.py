@@ -87,6 +87,52 @@ def get_oven_info(oven_id=None):
     })
 
 
+@bp.route("/", methods=['GET'])
+def get_all_ovens(oven_id=None):
+    """
+    See currently connected ovens.
+    ---
+    responses:
+        200:
+            description: Successfully returned the  ovens' info
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required:
+                            - state
+                        properties:
+                            state:
+                                type: string
+                            temperature:
+                                type: integer
+                            time:
+                                type: integer
+                            recipe:
+                                type: object
+                                properties:
+                                    name:
+                                        type: string
+                                    prep_time:
+                                        type: integer
+                                    prep_details:
+                                        type: string
+                                    baking_temperature:
+                                        type: integer
+    """
+    response = []
+
+    for k,oven in connected_devices.items():
+        response.append({
+            "id": k,
+            "state": oven.state["state"],
+            "temperature": oven.temperature,
+            "time": oven.time,
+            "recipe": oven.recipe_info
+        })
+    return jsonify(response)
+
+
 @bp.route("/<oven_id>/state", methods=['POST'])
 def set_oven_state(oven_id=None):
     """
