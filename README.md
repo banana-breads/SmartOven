@@ -165,10 +165,17 @@ pytest tests/
 4. If you want to run the tests and check the coverage you can run:
 ```bash
 cd ..
-```
-```bash
+
 pytest --cov=SmartOven SmartOven/tests/
 ```
+
+### Automation tests
+
+To run the automation tests provided for this project, you should have a Postman account
+and access [this link](https://smartoven.postman.co/workspace/SmartOven-IoT~3965cbb7-e5be-43a9-8974-8701218a8c51>).
+to run them. Select the environment coresponding to the collection you want to run and after than, select a collection 
+and choose `Run collection`.
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- LICENSE -->

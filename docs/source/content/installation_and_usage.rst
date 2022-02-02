@@ -107,7 +107,44 @@ To access the Swagger API, access http://localhost:500/apidocs/ and enjoy
 all of your oven's features.
 
 
+Testing
+#######
 
+You can run our tests by:
+
+1. Starting the MQTT Broker service by running:
+
+.. code-block:: console
+
+   mosquitto
+
+2. Activating the environment using
+
+.. code-block:: console
+
+   .\venv\Scripts\activate # for Windows
+   source venv/bin/activate # for Unix
+
+3. Using this command in the project root folder:
+
+.. code-block:: console
+
+   pytest tests/
+
+4. If you want to run the tests and check the coverage you can run:
+
+.. code-block:: console
+
+   cd ..
+   pytest --cov=SmartOven SmartOven/tests/
+
+Automation Tests
+================
+
+To run the automation tests provided for this project, you should have a Postman account
+and access `this link <https://smartoven.postman.co/workspace/SmartOven-IoT~3965cbb7-e5be-43a9-8974-8701218a8c51>`_
+to run them. Select the environment coresponding to the collection you want to run and after than, select a collection 
+and choose `Run collection`.
 
 
 
