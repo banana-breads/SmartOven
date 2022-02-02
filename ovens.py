@@ -85,7 +85,7 @@ def get_oven_info(oven_id=None):
     })
 
 
-@bp.route("/", methods=['GET'])
+@bp.route("", methods=['GET'])
 def get_all_ovens(oven_id=None):
     """
     See currently connected ovens.
