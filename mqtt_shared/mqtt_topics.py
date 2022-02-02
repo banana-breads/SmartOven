@@ -1,9 +1,9 @@
 CONNECT = 'BananaBreadSmartOven/connect'
 DISCONNECT = 'BananaBreadSmartOven/disconnect'
 
-################
-
 PREFIX = 'BananaBreadSmartOven/{device_id}'
+
+################
 
 INFO_PREFIX = f'{PREFIX}/info'
 
@@ -18,6 +18,7 @@ STATE = f'{INFO_PREFIX}/state'
 RECIPE_DETAILS = f'{INFO_PREFIX}/recipe_details'
 
 RECIPE_DONE = f'{INFO_PREFIX}/recipe_done'
+
 ################
 
 SETTINGS_PREFIX = f'{PREFIX}/settings'
@@ -32,4 +33,8 @@ SET_TEMPERATURE = f'{SETTINGS_PREFIX}/set_temperature'
 # send instructions to change oven cooking time
 SET_TIME = f'{SETTINGS_PREFIX}/set_time'
 
-GET_RECIPE_DETAILS = f'{SETTINGS_PREFIX}/get_recipe_details'
+################
+
+REQUEST_PREFIX = f'{PREFIX}/request/'
+
+GET_RECIPE_DETAILS = f'{REQUEST_PREFIX}/get_recipe_details'
