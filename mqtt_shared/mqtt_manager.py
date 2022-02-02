@@ -6,6 +6,7 @@ from paho.mqtt import client as mqtt_client
 from mqtt_shared.mqtt_topics import CONNECT, DISCONNECT
 
 _client: mqtt_client.Client
+
 # _BROKER = "broker.emqx.io"
 _BROKER = 'localhost'
 _PORT = 1883
@@ -81,7 +82,7 @@ def _client_connect(device_name, device_serial):
     _client.on_connect = _on_connect
     _client.on_message = _on_connect
     _client.on_disconnect = _on_disconnect
-    signal.signal(signal.SIGINT, _disconnect_handler())
+    #signal.signal(signal.SIGINT, _disconnect_handler())
 
     _client.connect(_BROKER, _PORT)
 

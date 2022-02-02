@@ -11,8 +11,8 @@ _PUBLISH_RATE = 3 # pause between publishes
 def run():
     client_name = 'oven'
     client_serial = str(uuid.uuid4())
-
     mqtt.start(client_name, client_serial)
+    print(f'{client_name}-{client_serial}')
 
     oven = get_oven()
     oven.set_listeners()

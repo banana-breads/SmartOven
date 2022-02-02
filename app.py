@@ -70,6 +70,11 @@ def create_app(test_config=None, testing=None):
     # Save OpenAPI specs
     # with app.app_context():
     #     dump_apispecs_to_json(swagger)
+
+    mqtt_manager.start("server", 1, [
+        (mqtt_topics.CONNECT, _handle_device_connect),
+        (mqtt_topics.DISCONNECT, _handle_device_disconnect)
+    ])
     return app
 
 def _handle_device_connect(client, userdata, msg):
@@ -128,8 +133,4 @@ def _handle_device_disconnect(client, userdata, msg):
 if __name__ == "__main__":
     args = parser.parse_args()
     create_app(testing=args.test)
-    mqtt_manager.start("server", 1, [
-        (mqtt_topics.CONNECT, _handle_device_connect),
-        (mqtt_topics.DISCONNECT, _handle_device_disconnect)
-    ])
     app.run(debug=False)

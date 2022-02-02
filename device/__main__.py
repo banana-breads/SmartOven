@@ -67,7 +67,7 @@ def run():
 
     # handle disconnect
     handler = on_disconnect(client)
-    signal.signal(signal.SIGINT, handler)
+    #signal.signal(signal.SIGINT, handler)
 
     oven = Oven()
     publish(client, oven)
