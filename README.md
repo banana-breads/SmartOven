@@ -139,6 +139,10 @@ python device.py
 ```
 if the server exists, it will connect automatically.
 
+#### Swagger API
+To access the Swagger API, access [http://localhost:5000/apidocs/]() and enjoy all of your oven's features.
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ## Testing
 You can run our tests by:
 
@@ -165,10 +169,6 @@ cd ..
 ```bash
 pytest --cov=SmartOven SmartOven/tests/
 ```
-
-#### Swagger API
-To access the Swagger API, access [http://localhost:5000/apidocs/]() and enjoy all of your oven's features.
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- LICENSE -->
 ## License
