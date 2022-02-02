@@ -50,6 +50,7 @@ SmartOven's developers are
 
 This project was developed during the Software Engineering Course at University of Bucharest under guidance of our teacher <a href="https://github.com/raresito">Rareș Cristea</a>.
 
+For more information about our project you can also check our [SmartOven's online Documentation](https://smartoven.readthedocs.io/en/latest/) and the [Customer Requirements Analysis Document](https://github.com/banana-breads/SmartOven/blob/update-customer-analysis-doc/docs/Document_de_analiza_a_cerintelor_clientului__SmartOven.pdf).
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Built With
