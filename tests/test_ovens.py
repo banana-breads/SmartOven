@@ -28,7 +28,7 @@ def connecting():
         connect_device()
     set_device_id()  
 
-'''
+
 class TestGetOvenInfo():
 
     def test_not_found_oven(self, client):
@@ -181,19 +181,76 @@ class TestPostOvenTime():
         assert response.status_code ==  200
         assert response.json['message'] == "Success"
 
-'''
 
 class TestIntegration:
 
     def test_integration1(self, client):
         # caut reteta pe net
-        # iau datele cuptorului
-        # pun reteta pe cuptor
-        # pornesc cuptorul
-        # opresc cuptorul
-        # sters reteta
-        pass
+        searched_recipe = {
+            "name":"Rustic Pasta with Chunky Vegetables"
+        }
+        recipe_name = "Rustic-Pasta-with-Chunky-Vegetables" # numele corespondent al retetei
 
+        connecting()
+        response = client.post('/recipe/find', json=searched_recipe, follow_redirects=True)
+        assert response.status_code == 200
+
+        # vad daca s-a adaugat reteta
+        response = client.get(f'/recipe/{recipe_name}', follow_redirects=True)
+        assert response.status_code == 200
+
+        recipe = response.json
+        recipe_id = recipe['id']
+
+        # iau datele cuptorului
+        oven = self.get_oven(client)
+        oven_id = oven['id']
+
+        # pun reteta pe cuptor
+        response = client.post(f'oven/{oven_id}/recipe/{recipe_name}', follow_redirects=True)
+        assert response.status_code == 200
+        assert response.json['message'] == "Success"      
+
+        sleep(3)
+        #verific ca s-a setat corect
+        self.check_if_oven_recipe_is_set_correctly(client, recipe)
+
+        # pornesc cuptorul
+        body = {'state': True}
+        response = client.post(f'oven/{oven_id}/state', json=body, follow_redirects=True)
+        assert response.status_code ==  200
+        assert response.json['message'] == f"Oven with id {oven_id} has started cooking."
+
+        sleep(3)
+        #verific ca a pornit
+        self.check_if_oven_state_is_set_correctly(client, True)
+
+        # opresc cuptorul
+        body = {'state': False}
+        response = client.post(f'oven/{oven_id}/state', json=body, follow_redirects=True)
+        assert response.status_code ==  200
+        assert response.json['message'] == f"Oven with id {oven_id} has stopped cooking."
+        sleep(3)
+
+        #verific ca s-a oprit
+        self.check_if_oven_state_is_set_correctly(client, False)
+
+        # sters reteta
+        self.delete_recipe(client, recipe_id)
+        sleep(3)
+
+
+    def check_if_oven_state_is_set_correctly(self, client, expected_state):
+        oven = self.get_oven(client)
+        assert oven["state"] == expected_state
+
+    def check_if_oven_recipe_is_set_correctly(self, client, expected_recipe):
+        oven = self.get_oven(client)
+        assert oven["recipe"]["name"] == expected_recipe["name"] 
+        assert oven["recipe"]["prep_details"] == expected_recipe["prep_details"]
+        assert oven["temperature"]["target_temperature"] == expected_recipe["baking_temperature"]
+        assert oven["time"]["target_time"] == expected_recipe["prep_time"]
+    
     def add_recipe(self, client, recipe):
         response = client.post('/recipe', json=recipe, follow_redirects=True)
         assert response.status_code == 200
