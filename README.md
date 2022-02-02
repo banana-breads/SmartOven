@@ -31,6 +31,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#usage">Testing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -138,7 +139,32 @@ python device.py
 ```
 if the server exists, it will connect automatically.
 
+## Testing
+You can run our tests by:
 
+1. Starting the MQTT Broker service by running:
+```bash
+mosquitto
+```
+
+2. Activating the environment using
+```bash
+.\venv\Scripts\activate # for Windows
+source venv/bin/activate # for Unix
+```
+
+3. Using this command in the project root folder:
+```bash
+pytest tests/
+```
+
+4. If you want to run the tests and check the coverage you can run:
+```bash
+cd ..
+```
+```bash
+pytest --cov=SmartOven SmartOven/tests/
+```
 
 #### Swagger API
 To access the Swagger API, access [http://localhost:5000/apidocs/]() and enjoy all of your oven's features.
