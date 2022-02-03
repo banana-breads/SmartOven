@@ -141,6 +141,11 @@ if the server exists, it will connect automatically.
 
 #### Swagger API
 To access the Swagger API, access [http://localhost:5000/apidocs/]() and enjoy all of your oven's features.
+
+#### Async API
+To access the AsyncApi open `./static/website/index.html` in your browser
+If you update the spec sheet, you can regenerate the website with `sudo ag ./static/asyncapi.yml @asyncapi/html-template -o ./static/website`.
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Testing
@@ -208,6 +213,8 @@ Some resources we found helpful and we want to give credit to are:
 * [PyMongo Documentation](https://pymongo.readthedocs.io/en/stable/tutorial.html)
 * [PyTest Documentation](https://docs.pytest.org/en/6.2.x/contents.html)
 * [Pytest-cov documentation](https://pytest-cov.readthedocs.io/en/latest/)
+* [Paho-mqtt documentation](https://pypi.org/project/paho-mqtt/)
+* [AsyncApi documentation](https://www.asyncapi.com/docs)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

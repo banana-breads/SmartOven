@@ -1,0 +1,464 @@
+{
+  "asyncapi": "2.0.0",
+  "channels": {
+    "BananaBreadSmartOven/connect": {
+      "description": "used to notify the server when a new device is connected",
+      "publish": {
+        "message": {
+          "name": "connect message",
+          "payload": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "BananaBreadSmartOven/disconnect": {
+      "description": "used to notify the server when a connected device is disconnected",
+      "publish": {
+        "message": {
+          "name": "disconnect message",
+          "payload": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "BananaBreadSmartOven/{device_id}/info/recipe_details": {
+      "description": "used by device to publish state data when requested",
+      "parameters": {
+        "device_id": {
+          "description": "Id of a connected device",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "publish": {
+        "message": {
+          "contentType": "application/json",
+          "payload": {
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "prep_details": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        }
+      }
+    },
+    "BananaBreadSmartOven/{device_id}/info/recipe_done": {
+      "description": "used to notify the server when the time if off",
+      "parameters": {
+        "device_id": {
+          "description": "Id of a connected device",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "publish": {
+        "message": {
+          "contentType": "application/json",
+          "payload": {
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        }
+      }
+    },
+    "BananaBreadSmartOven/{device_id}/info/state": {
+      "description": "used by device to constantly publish state data",
+      "parameters": {
+        "device_id": {
+          "description": "Id of a connected device",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "publish": {
+        "message": {
+          "contentType": "application/json",
+          "payload": {
+            "properties": {
+              "state": {
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        }
+      }
+    },
+    "BananaBreadSmartOven/{device_id}/info/temperature": {
+      "description": "used by device to constantly publish temperature data",
+      "parameters": {
+        "device_id": {
+          "description": "Id of a connected device",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "publish": {
+        "message": {
+          "contentType": "application/json",
+          "payload": {
+            "properties": {
+              "current_temperature": {
+                "maximum": 250,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "target_temperature": {
+                "maximum": 250,
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        }
+      }
+    },
+    "BananaBreadSmartOven/{device_id}/info/time": {
+      "description": "used by device to constantly publish time data",
+      "parameters": {
+        "device_id": {
+          "description": "Id of a connected device",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "publish": {
+        "message": {
+          "contentType": "application/json",
+          "payload": {
+            "properties": {
+              "target_time": {
+                "maximum": 720,
+                "minimum": 0,
+                "type": "number"
+              },
+              "time_elapsed": {
+                "maximum": 720,
+                "minimum": 0,
+                "type": "number"
+              },
+              "time_left": {
+                "maximum": 720,
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "type": "object"
+          }
+        }
+      }
+    },
+    "BananaBreadSmartOven/{device_id}/request/get_recipe_details": {
+      "description": "used by server to request the current recipe details from a device",
+      "parameters": {
+        "device_id": {
+          "description": "Id of a connected device",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "publish": {
+        "message": {
+          "payload": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "BananaBreadSmartOven/{device_id}/settings/set_recipe": {
+      "description": "used to change the current recipe settings on a device",
+      "parameters": {
+        "device_id": {
+          "description": "Id of a connected device",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "publish": {
+        "message": {
+          "contentType": "application/json",
+          "payload": {
+            "properties": {
+              "baking_temperature": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "prep_details": {
+                "type": "string"
+              },
+              "prep_time": {
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        }
+      }
+    },
+    "BananaBreadSmartOven/{device_id}/settings/set_state": {
+      "description": "used to change the state of a device",
+      "parameters": {
+        "device_id": {
+          "description": "Id of a connected device",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "publish": {
+        "message": {
+          "contentType": "application/json",
+          "payload": {
+            "properties": {
+              "state": {
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        }
+      }
+    },
+    "BananaBreadSmartOven/{device_id}/settings/set_temperature": {
+      "description": "used to change the target temperature on a device",
+      "parameters": {
+        "device_id": {
+          "description": "Id of a connected device",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "publish": {
+        "message": {
+          "contentType": "application/json",
+          "payload": {
+            "properties": {
+              "temperature": {
+                "maximum": 250,
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        }
+      }
+    },
+    "BananaBreadSmartOven/{device_id}/settings/set_time": {
+      "description": "used to change the cooking time on a device",
+      "parameters": {
+        "device_id": {
+          "description": "Id of a connected device",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "publish": {
+        "message": {
+          "contentType": "application/json",
+          "payload": {
+            "properties": {
+              "time": {
+                "maximum": 720,
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "messages": {
+      "get_recipe_details": {
+        "payload": {
+          "type": "object"
+        }
+      },
+      "info_state": {
+        "contentType": "application/json",
+        "payload": {
+          "properties": {
+            "state": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "info_temperature": {
+        "contentType": "application/json",
+        "payload": {
+          "properties": {
+            "current_temperature": {
+              "maximum": 250,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "target_temperature": {
+              "maximum": 250,
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "info_time": {
+        "contentType": "application/json",
+        "payload": {
+          "properties": {
+            "target_time": {
+              "maximum": 720,
+              "minimum": 0,
+              "type": "number"
+            },
+            "time_elapsed": {
+              "maximum": 720,
+              "minimum": 0,
+              "type": "number"
+            },
+            "time_left": {
+              "maximum": 720,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "recipe_details": {
+        "contentType": "application/json",
+        "payload": {
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "prep_details": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "recipe_done": {
+        "contentType": "application/json",
+        "payload": {
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "set_recipe": {
+        "contentType": "application/json",
+        "payload": {
+          "properties": {
+            "baking_temperature": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "prep_details": {
+              "type": "string"
+            },
+            "prep_time": {
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "set_state": {
+        "contentType": "application/json",
+        "payload": {
+          "properties": {
+            "state": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "set_temperature": {
+        "contentType": "application/json",
+        "payload": {
+          "properties": {
+            "temperature": {
+              "maximum": 250,
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "set_time": {
+        "contentType": "application/json",
+        "payload": {
+          "properties": {
+            "time": {
+              "maximum": 720,
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        }
+      }
+    },
+    "parameters": {
+      "device_id": {
+        "description": "Id of a connected device",
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "defaultContentType": "application/json",
+  "info": {
+    "description": "the mqtt spes sheet of the Smart Oven app IOT app",
+    "license": {
+      "name": "MIT License",
+      "url": "https://github.com/banana-breads/SmartOven/blob/master/LICENSE"
+    },
+    "title": "Smart Oven - MQTT API",
+    "version": "1.0.0"
+  },
+  "servers": {
+    "production": {
+      "description": "public, free, mqtt broker",
+      "protocol": "mqtt",
+      "url": "broker.emqx.io"
+    }
+  }
+}

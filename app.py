@@ -22,7 +22,7 @@ swagger = None
 
 # Arguments
 parser = argparse.ArgumentParser(description="SmartOven Flask server")
-parser.add_argument('-t', '--test', 
+parser.add_argument('-t', '--test',
     help='Run the server in testing mode',
     action="store_true"
 )
@@ -114,7 +114,7 @@ def _handle_device_connect(client, userdata, msg):
             elif info_type == 'state':
                 device.state = data
             elif info_type == 'recipe_done':
-                # can be recplace with notifications in production
+                # can be replace with notifications in production
                 print(data.get('message', "Recipe done"))
 
 

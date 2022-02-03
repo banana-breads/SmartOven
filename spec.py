@@ -23,4 +23,3 @@ def dump_apispecs_to_json(swagger, path="./static/swagger"):
             if data.get("definitions") == {}:
                 data.pop("definitions")
             yaml.dump(data, f)
-    

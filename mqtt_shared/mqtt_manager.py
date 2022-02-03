@@ -6,7 +6,6 @@ from paho.mqtt import client as mqtt_client
 from mqtt_shared.mqtt_topics import CONNECT, DISCONNECT
 
 _client: mqtt_client.Client
-
 # _BROKER = "broker.emqx.io"
 _BROKER = 'localhost'
 _PORT = 1883
