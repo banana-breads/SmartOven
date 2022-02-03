@@ -14,7 +14,7 @@ our_device_id = None
 def connect_device():
     thread = Thread(target=device.run)
     thread.start()
-    sleep(1)
+    sleep(5)
 
 def set_device_id():
     global our_device_id

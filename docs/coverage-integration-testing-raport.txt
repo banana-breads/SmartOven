@@ -1,0 +1,24 @@
+---------- coverage: platform linux, python 3.8.10-final-0 -----------
+Name                                              Stmts   Miss  Cover
+---------------------------------------------------------------------
+SmartOven/app.py                                     77     14    82%
+SmartOven/constants.py                                9      0   100%
+SmartOven/db.py                                      25      2    92%
+SmartOven/device.py                                  18      1    94%
+SmartOven/globals.py                                  9      0   100%
+SmartOven/mqtt.py                                    20     20     0%
+SmartOven/mqtt_shared/__init__.py                     0      0   100%
+SmartOven/mqtt_shared/mqtt_manager.py                66     24    64%
+SmartOven/mqtt_shared/mqtt_topics.py                 15      0   100%
+SmartOven/oven/__init__.py                            0      0   100%
+SmartOven/oven/oven.py                              122     29    76%
+SmartOven/ovens.py                                   79     19    76%
+SmartOven/recipe_search_online.py                    80     12    85%
+SmartOven/recipes.py                                 94     25    73%
+SmartOven/spec.py                                    12      8    33%
+SmartOven/tests-integration/test_client.py           17      0   100%
+SmartOven/tests-integration/test_integration.py     121      1    99%
+---------------------------------------------------------------------
+TOTAL                                               764    155    80%
+
+=============================== 2 passed, 1 warning in 23.77s =======

@@ -171,6 +171,8 @@ def get_recipe(recipe_name=None):
                         required:
                             - name
                         properties:
+                            id: 
+                                type: string
                             name:
                                 type: string
                             prep_time:
