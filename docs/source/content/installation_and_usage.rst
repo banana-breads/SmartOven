@@ -124,19 +124,37 @@ You can run our tests by:
 
    .\venv\Scripts\activate # for Windows
    source venv/bin/activate # for Unix
-
-3. Using this command in the project root folder:
+   
+3. We created 32 unit tests. You can run them by using this command in the project root folder:
 
 .. code-block:: console
+   
+   pytest tests-unit/
 
-   pytest tests/
-
-4. If you want to run the tests and check the coverage you can run:
+4. If you want to run the unit tests and check the code coverage you can run:
 
 .. code-block:: console
 
    cd ..
-   pytest --cov=SmartOven SmartOven/tests/
+   pytest --cov=SmartOven SmartOven/tests-unit/
+
+You can find our results `here <https://github.com/banana-breads/SmartOven/blob/master/docs/unit_tests_coverage.png>`_.
+
+5. We created 2 intergation tests. You can run them by using this command in the project root folder:
+
+.. code-blcok:: console
+
+   pytest tests-integration/
+
+6. If you want to run the intergation tests and check the code coverage you can run:
+
+.. code-block:: console
+   
+   cd ..
+   pytest --cov=SmartOven SmartOven/tests-integration/
+   
+You can find our results `here <https://github.com/banana-breads/SmartOven/blob/master/docs/integration_tests_coverage.png>`_.
+
 
 Automation Tests
 ================
