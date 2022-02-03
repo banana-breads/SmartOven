@@ -51,7 +51,7 @@ SmartOven's developers are
 
 This project was developed during the Software Engineering Course at University of Bucharest under guidance of our teacher <a href="https://github.com/raresito">Rareș Cristea</a>.
 
-For more information about our project you can also check our [SmartOven's online Documentation](https://smartoven.readthedocs.io/en/latest/) and the [Customer Requirements Analysis Document](https://github.com/banana-breads/SmartOven/blob/update-customer-analysis-doc/docs/Document_de_analiza_a_cerintelor_clientului__SmartOven.pdf).
+For more information about our project you can also check our [SmartOven's online Documentation](https://smartoven.readthedocs.io/en/latest/) and the [Customer Requirements Analysis Document](https://github.com/banana-breads/SmartOven/blob/master/docs/Document_de_analiza_a_cerintelor_clientului__SmartOven.pdf).
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Built With
@@ -162,17 +162,31 @@ mosquitto
 source venv/bin/activate # for Unix
 ```
 
-3. Using this command in the project root folder:
+3. We created 32 unit tests. You can run them by using this command in the project root folder:
 ```bash
-pytest tests/
+pytest tests-unit/
 ```
 
-4. If you want to run the tests and check the coverage you can run:
+4. If you want to run the unit tests and check the code coverage you can run:
 ```bash
 cd ..
 
-pytest --cov=SmartOven SmartOven/tests/
+pytest --cov=SmartOven SmartOven/tests-unit/
 ```
+You can find our result [here](https://github.com/banana-breads/SmartOven/blob/master/docs/unit_tests_coverage.png).
+
+3. We created 2 intergation tests. You can run them by using this command in the project root folder:
+```bash
+pytest tests-integration/
+```
+
+4. If you want to run the intergation tests and check the code coverage you can run:
+```bash
+cd ..
+
+pytest --cov=SmartOven SmartOven/tests-integration/
+```
+You can find our result [here](https://github.com/banana-breads/SmartOven/blob/master/docs/integration_tests_coverage.png).
 
 ### Automation tests
 
