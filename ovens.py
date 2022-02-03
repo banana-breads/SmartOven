@@ -72,15 +72,13 @@ def get_oven_info(oven_id=None):
                                 type: string
                                 example: No oven found with id
     """
-    if not oven_id:
-        return jsonify({"message":"Please specify an oven ID."}), 400
-
+    
     if not _check_if_oven_exists(oven_id):
         return jsonify({"message":"No oven found with id"}), 404
 
     oven = connected_devices[oven_id]
     return jsonify({
-        "state": oven.state["state"],
+        "state": oven.state,
         "temperature": oven.temperature,
         "time": oven.time,
         "recipe": oven.recipe_info
@@ -326,7 +324,7 @@ def set_oven_temperature(oven_id=None):
     body = request.json
     if body is None or 'temperature' not in body:
         return jsonify({ 'message': f'Missing temperature parameter.' \
-                        'No action taken on oven {oven_id}.' }), 400
+                        f'No action taken on oven {oven_id}.' }), 400
 
     if not _check_if_oven_exists(oven_id):
         return jsonify({"message": f"Oven with id {oven_id} does not exist." \
@@ -404,7 +402,7 @@ def set_oven_time(oven_id=None):
     body = request.json
     if body is None or 'time' not in body:
         return jsonify({ 'message': f'Missing time parameter.' \
-                        ' No action taken on oven {oven_id}.' }), 400
+                        f' No action taken on oven {oven_id}.' }), 400
     if not _check_if_oven_exists(oven_id):
         return jsonify({"message": f"Oven with id {oven_id} does not exist." \
                         " Cannot set time."}), 404
